@@ -12,5 +12,12 @@ import java.util.ArrayList;
  */
 public class Comprador extends Persona{
     private ArrayList<Oferta> ofertas;
+
+    public Comprador(ArrayList<Oferta> ofertas, String nombre, String apellidos, String organizacion, String correoElectronico, String clave) {
+        super(nombre, apellidos, organizacion, correoElectronico, clave);
+        this.ofertas = ofertas;
+    }
+    
+    
     
 }
