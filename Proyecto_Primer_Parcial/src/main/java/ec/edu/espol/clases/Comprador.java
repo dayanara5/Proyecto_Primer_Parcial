@@ -4,10 +4,13 @@
  */
 package ec.edu.espol.clases;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Axel
  */
 public class Comprador extends Persona{
+    private ArrayList<Oferta> ofertas;
     
 }

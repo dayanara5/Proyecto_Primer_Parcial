@@ -21,5 +21,6 @@ public class Vehiculo {
     private String combustible;
     private double precio;
     private ArrayList<Oferta> ofertas;
+    private Vendedor vendedor;
     
 }

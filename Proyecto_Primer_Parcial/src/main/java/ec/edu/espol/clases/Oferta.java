@@ -4,12 +4,15 @@
  */
 package ec.edu.espol.clases;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Axel
  */
 public class Oferta {
-    private Comprador comprador;
+    private ArrayList<Comprador> compradores;
+    private Vehiculo vehiculo;
     private double precio;
     
 }
