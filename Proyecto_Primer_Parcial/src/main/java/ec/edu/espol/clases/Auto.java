@@ -11,5 +11,11 @@ package ec.edu.espol.clases;
 public class Auto extends Vehiculo{
     private String vidrios;
     private String transmision;
+
+    public Auto(String placa, String marca, String modelo, String tipoMotor, int anio, double recorrido, String color, String combustible, String vidrios, String transmision, double precio) {
+        super(placa, marca, modelo, tipoMotor, anio, recorrido, color, combustible, precio);
+        this.vidrios = vidrios;
+        this.transmision = transmision;
+    }
     
 }
