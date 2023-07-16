@@ -11,8 +11,38 @@ import java.util.ArrayList;
  * @author Axel
  */
 public class Oferta {
-    private ArrayList<Comprador> compradores;
+    private Comprador comprador;
     private Vehiculo vehiculo;
     private double precio;
+
+    public Oferta(Comprador comprador, Vehiculo vehiculo, double precio) {
+        this.comprador = comprador;
+        this.vehiculo = vehiculo;
+        this.precio = precio;
+    }
+
+    public Comprador getComprador() {
+        return comprador;
+    }
+
+    public Vehiculo getVehiculo() {
+        return vehiculo;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setComprador(Comprador comprador) {
+        this.comprador = comprador;
+    }
+
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
     
 }
