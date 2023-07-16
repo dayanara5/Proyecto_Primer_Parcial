@@ -2,6 +2,8 @@
 package ec.edu.espol.clases;
 
 import static ec.edu.espol.clases.Hash.getSHA;
+import static ec.edu.espol.clases.Utilitaria.inicioSesion;
+import static ec.edu.espol.clases.Utilitaria.validarCorreo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -63,7 +65,7 @@ public class Comprador extends Persona{
                                 correo,contraHash );      
         
         do{
-            if (validarCorreo(Ncomprador) == false){
+            if (validarCorreo(Ncomprador, "compradores") == false){
                 try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File("compradores.txt"),true)))
                 {
                     pw.println(nombres+"|"+apellidos+"|"+org+"|"+correo+"|"+contraHash);
@@ -75,7 +77,7 @@ public class Comprador extends Persona{
             }
             else
                 System.out.println("El correo ya ha sido registrado, ingrese uno nuevo");
-        }while(validarCorreo(Ncomprador) == true);
+        }while(validarCorreo(Ncomprador, "compradores") == true);
       return null;      
     }
     
@@ -310,15 +312,14 @@ public class Comprador extends Persona{
         }    
         
     
-    public static void hacerOferta(){
-//        
+    public static void hacerOferta(){        
          
          Scanner sc = new Scanner(System.in);
          String correo = sc.next();
          String contrasena = sc.next();
          ArrayList<Oferta> ofertasVehiculo= new ArrayList<>();
          
-         inicioSesion(correo, contrasena); //Siempre retornara true por las condiciones del metodo
+         inicioSesion(correo, contrasena, "compradores"); //Siempre retornara true por las condiciones del metodo
 
          Comprador comprador = new Comprador(correo, contrasena);        
          
@@ -716,43 +717,7 @@ public class Comprador extends Persona{
              }
          }
     }
-    
-    public static boolean validarCorreo(Comprador p){
-        try(Scanner sc = new Scanner(new File("compradores.txt")) ){
-            while(sc.hasNextLine())
-            {
-                String linea = sc.nextLine();
-                String[] tokens= linea.split("\\|");
-                String correo = tokens[4];
-                if(p.getCorreoElectronico().equals(correo))
-                    return true;                
-                                           
-            }
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        return false;
-    }
-    
-    public static boolean validarContrasena(Comprador p){
-        try(Scanner sc = new Scanner(new File("compradores.txt")) ){
-            while(sc.hasNextLine())
-            {
-                String linea = sc.nextLine();
-                String[] tokens= linea.split("\\|");
-                String correo = tokens[5];
-                if(p.getClave().equals(correo))
-                    return true;                
-                                           
-            }
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        return false;
-    }
-    
+
     public static void opcionesComprador(){
         Scanner sc = new Scanner(System.in);
         boolean salir= false;
@@ -771,7 +736,7 @@ public class Comprador extends Persona{
                         registrarComprador();
                         break;
                     case 2:
-                        
+                        hacerOferta();
                         break;
                     case 3:
                         salir= true;
@@ -786,27 +751,6 @@ public class Comprador extends Persona{
         }
         System.out.println("Regresando al menu anterior");
     }
-    public static boolean inicioSesion(String correo, String contrasena) {
-        Scanner sc = new Scanner(System.in);
-        
-            System.out.println("Ingrese correo");
-            System.out.println("Ingrese contraseña");
-            correo= sc.next();
-            contrasena= sc.next();
-            Comprador comprador= new Comprador(correo, contrasena);
-            while (validarCorreo(comprador) == false){
-                System.out.println("Correo invalido, ingrese uno existente");
-                correo= sc.next();
-                comprador.setCorreoElectronico(correo);
-            }
-            
-            while(validarContrasena(comprador)== false){
-                System.out.println("Contrasena invalida, intentelo de nuevo");
-                contrasena = sc.next();
-                comprador.setClave(contrasena);
-            }
-            
-     return ((validarCorreo(comprador) == true)&& (validarContrasena(comprador)==true));
-    }
+    
 }
 
