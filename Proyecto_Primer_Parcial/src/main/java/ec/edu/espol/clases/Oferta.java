@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author Axel
  */
 public class Oferta {
-    private ArrayList<Comprador> compradores;
+    private Comprador comprador;
     private Vehiculo vehiculo;
     private double precio;
     

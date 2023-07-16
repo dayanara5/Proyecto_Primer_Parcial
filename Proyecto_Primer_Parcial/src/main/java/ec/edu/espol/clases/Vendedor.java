@@ -87,5 +87,20 @@ public class Vendedor extends Persona{
         Vendedor vendedor = new Vendedor(nombres, apellidos, organizacion, correo, claveHash );
         return vendedor;
     }
+    public Vehiculo validarPlaca(){
+        Vehiculo v_1;
+        System.out.println("Ingrese la placa:");
+        Scanner sn= new Scanner(System.in);
+        String placa=sn.nextLine();
+        for(Vehiculo v: vehiculos){
+            if(v.getPlaca().equals(placa)){
+                v_1=v;
+                System.out.println(v.getModelo()+"precio:"+v.getPrecio());
+                System.out.println("Se han realizado:"+v.getOfertas().size()+"Ofertas");
+                return v_1;
+            }
+        }
+        return null;
+    }
     
 }
