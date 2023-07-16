@@ -22,7 +22,6 @@ public class Vehiculo {
     private double precio;
     private ArrayList<Oferta> ofertas;
     private Vendedor vendedor;
-    private String motocicletas;
 
 
     public Vehiculo(String placa, String marca, String modelo, String tipoMotor, int anio, double recorrido, String color, String combustible, double precio) {
@@ -82,10 +81,6 @@ public class Vehiculo {
         return vendedor;
     }
 
-    public String getMotocicletas() {
-        return motocicletas;
-    }
-
     public void setPlaca(String placa) {
         this.placa = placa;
     }
@@ -130,9 +125,6 @@ public class Vehiculo {
         this.vendedor = vendedor;
     }
 
-    public void setMotocicletas(String motocicletas) {
-        this.motocicletas = motocicletas;
-    }
     public Oferta mostrarOferta(int indice){
         Oferta ele_oferta= ofertas.get(indice);
         System.out.println("Correo:"+ele_oferta.getComprador().getCorreoElectronico());

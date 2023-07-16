@@ -4,10 +4,14 @@
  */
 package ec.edu.espol.clases;
 
-import static ec.edu.espol.clases.Comprador.inicioSesion;
+
 import static ec.edu.espol.clases.Hash.getSHA;
 import static ec.edu.espol.clases.Hash.toHexString;
 import static ec.edu.espol.clases.Utilitaria.inicioSesion;
+import static ec.edu.espol.clases.Utilitaria.validarCorreo;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -36,6 +40,11 @@ public class Vendedor extends Persona {
         super(nombre, apellidos, organizacion, correoElectronico, clave);
     }
 
+    public Vendedor(String correoElectronico, String clave) {
+        super(null, null, null, correoElectronico, clave);
+        this.vehiculos = null;
+    }
+
     public ArrayList<Vehiculo> getVehiculos() {
         return vehiculos;
     }
@@ -44,37 +53,46 @@ public class Vendedor extends Persona {
         this.vehiculos = vehiculos;
     }
 
-    public static void menuVendedor() throws NoSuchAlgorithmException {
-        
-        System.out.println("1. Registrar nuevo Vendedor");
-        System.out.println("2. Registrar un nuevo Vehiculo");
-        System.out.println("3. Aceptar oferta");
-        System.out.println("4. Regresar");
+    public static void menuVendedor() {
+        Scanner sc = new Scanner(System.in);
+        boolean salir = false;
+        int opcion;
 
-        Scanner entrada = new Scanner(System.in);
-        int respuesta = entrada.nextInt();
+        while (!salir) {
+            System.out.println("1.Registrar un nuevo vendedor");
+            System.out.println("2.Registrar un nuevo vehiculo");
+            System.out.println("3.Aceptar oferta");
+            System.out.println("4.Salir");
 
-        switch (respuesta) {
-            case 1:
-                registrarVendedor();
-                break;
+            try {
+                System.out.println("Eliga que desea hacer");
+                opcion = sc.nextInt();
+                switch (opcion) {
+                    case 1:
+                        registrarVendedor();
+                        break;
+                    case 2:
 
-            case 2:
+                        break;
+                    case 3:
 
-                break;
+                        break;
 
-            case 3:
-                revisarOfertas();
-                break;
+                    case 4:
+                        salir = true;
+                    default:
+                        System.out.println("Eliga una opcion valida");
 
-            case 4:
-
-                break;
+                }
+            } catch (Exception e) {
+                System.out.println("Debes escribir un numero");
+                sc.next();
+            }
         }
-
+        System.out.println("Regresando al menu anterior");
     }
 
-    public Vendedor registrarVendedor() throws NoSuchAlgorithmException {
+    public static Vendedor registrarVendedor() throws NoSuchAlgorithmException {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Ingresar nombres: ");
@@ -89,29 +107,39 @@ public class Vendedor extends Persona {
         System.out.println("IngresarCorreoElectronico: ");
         String correo = sc.next();
 
-        //Validar Correo
         System.out.println("Ingresar Clave: ");
         String clave = sc.next();
         String claveHash = toHexString(getSHA(clave));
 
         Vendedor vendedor = new Vendedor(nombres, apellidos, organizacion, correo, claveHash);
-        return vendedor;
-    }
 
-    public Vehiculo validarPlaca() {
-        Vehiculo v_1;
-        System.out.println("Ingrese la placa:");
-        Scanner sn = new Scanner(System.in);
-        String placa = sn.nextLine();
-        for (Vehiculo v : vehiculos) {
-            if (v.getPlaca().equals(placa)) {
-                v_1 = v;
-                System.out.println(v.getModelo() + "precio:" + v.getPrecio());
-                System.out.println("Se han realizado:" + v.getOfertas().size() + "Ofertas");
-                return v_1;
+        boolean condicion = validarCorreo(vendedor, "vendedores");
+        do {
+            if (condicion == false) {
+                try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vendedores.txt"), true))) {
+                    pw.println(nombres + "|" + apellidos + "|" + organizacion + "|" + correo + "|" + claveHash);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+                return vendedor;
+            } else if (condicion == true) {
+                System.out.println("El correo ya ha sido registrado, ingrese uno nuevo");
+                System.out.println("Ingrese un correo valido: ");
+                correo = sc.nextLine();
+                vendedor.setCorreoElectronico(correo);
+                condicion = validarCorreo(vendedor, "compradores");
+                if (condicion == false) {
+                    try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("compradores.txt"), true))) {
+                        pw.println(nombres + "|" + apellidos + "|" + organizacion + "|" + correo + "|" + claveHash);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    return vendedor;
+                }
             }
-        }
-        return null;
+
+        } while (condicion);
+        return vendedor;
     }
 
     public void aceptarOferta(Vehiculo vehi, Oferta ofer) {
@@ -150,7 +178,7 @@ public class Vendedor extends Persona {
         }
     }
 
-    public void revisarOfertas() {
+   /* public void revisarOfertas() {
         Scanner sn = new Scanner(System.in);
         System.out.println("Ingrese su correo electronico:");
         String correo_elec = sn.nextLine();
@@ -161,16 +189,16 @@ public class Vendedor extends Persona {
             Vehiculo vehiculo_1 = validarPlaca();
             int opcion;
             do {
-                int contador=0;
+                int contador = 0;
                 Oferta oferta_1 = vehiculo_1.mostrarOferta(contador);
-                        System.out.println("1. Siguiente oferta");
-                        System.out.println("2. Aceptar Oferta");
+                System.out.println("1. Siguiente oferta");
+                System.out.println("2. Aceptar Oferta");
                 opcion = sn.nextInt();
                 sn.nextLine();
-                switch(opcion){
+                switch (opcion) {
                     case 1:
                         int i = vehiculo_1.siguienteOferta(contador);
-                        contador=i;
+                        contador = i;
                         vehiculo_1.mostrarOferta(contador);
                         break;
                     case 2:
@@ -179,5 +207,5 @@ public class Vendedor extends Persona {
                 }
             } 
         }
-    }
+    }*/
 }

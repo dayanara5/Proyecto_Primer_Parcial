@@ -21,7 +21,7 @@ public class Utilitaria {
                 }
                 System.out.println(contrasena);
                 System.out.println(contraHashP);
-                
+
                 if (contraHashP.equals(contrasena)) {
                     return true;
                 }
@@ -33,8 +33,53 @@ public class Utilitaria {
         return false;
     }
 
+    public static boolean validarContrasena(Vendedor v, String filenom) {
+        try (Scanner sc = new Scanner(new File(filenom + ".txt"))) {
+            while (sc.hasNextLine()) {
+                String linea = sc.nextLine();
+                String[] tokens = linea.split("\\|");
+                String contrasena = tokens[4];
+                String contraHashP = null;
+                try {
+                    contraHashP = Hash.toHexString(getSHA(v.getClave()));
+                } // For specifying wrong message digest algorithms
+                catch (Exception e) {
+                    System.out.println("Exception thrown for incorrect algorithm: " + e);
+                }
+                System.out.println(contrasena);
+                System.out.println(contraHashP);
+
+                if (contraHashP.equals(contrasena)) {
+                    return true;
+                }
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    public static boolean validarCorreo(Vendedor v, String filenom) {
+
+        try (Scanner sc = new Scanner(new File(filenom + ".txt"))) {
+            while (sc.hasNextLine()) {
+                String linea = sc.nextLine();
+                String[] tokens = linea.split("\\|");
+                String correo = tokens[3];
+                if (v.getCorreoElectronico().equals(correo)) {
+                    return true;
+                }
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
     public static boolean validarCorreo(Comprador p, String filenom) {
-        
+
         try (Scanner sc = new Scanner(new File(filenom + ".txt"))) {
             while (sc.hasNextLine()) {
                 String linea = sc.nextLine();
@@ -54,19 +99,57 @@ public class Utilitaria {
     public static boolean inicioSesion(String correo, String contrasena, String filenom) {
         Scanner sc = new Scanner(System.in);
 
-        Comprador comprador = new Comprador(correo, contrasena);
-        while (validarCorreo(comprador, filenom) == false) {
-            System.out.println("Correo invalido, ingrese uno existente");
-            correo = sc.next();
-            comprador.setCorreoElectronico(correo);
+        if (filenom.equals("vendedores")) {
+            Vendedor vendedor = new Vendedor(correo, contrasena);
+            while (validarCorreo(vendedor, filenom) == false) {
+                System.out.println("Correo invalido, ingrese uno existente");
+                correo = sc.next();
+                vendedor.setCorreoElectronico(correo);
+            }
+
+            while (validarContrasena(vendedor, filenom) == false) {
+                System.out.println("Contrasena invalida, intentelo de nuevo");
+                contrasena = sc.next();
+                vendedor.setClave(contrasena);
+            }
+
+            return ((validarCorreo(vendedor, filenom) == true) && (validarContrasena(vendedor, filenom) == true));
+        } else if (filenom.equals("compradores")) {
+            Comprador comprador = new Comprador(correo, contrasena);
+            while (validarCorreo(comprador, filenom) == false) {
+                System.out.println("Correo invalido, ingrese uno existente");
+                correo = sc.next();
+                comprador.setCorreoElectronico(correo);
+            }
+
+            while (validarContrasena(comprador, filenom) == false) {
+                System.out.println("Contrasena invalida, intentelo de nuevo");
+                contrasena = sc.next();
+                comprador.setClave(contrasena);
+            }
+
+            return ((validarCorreo(comprador, filenom) == true) && (validarContrasena(comprador, filenom) == true));
+        }
+        return false;
+    }
+
+    public static boolean validarPlaca(String placa) {
+
+        try (Scanner sc = new Scanner(new File("vehiculos.txt"))) {
+            while (sc.hasNextLine()) {
+                String linea = sc.nextLine();
+                String[] tokens = linea.split("\\|");
+                String placaRegistrada = tokens[0];
+                if (placa.equals(placaRegistrada)) {
+
+                    return true;
+                }
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
-        while (validarContrasena(comprador, filenom) == false) {
-            System.out.println("Contrasena invalida, intentelo de nuevo");
-            contrasena = sc.next();
-            comprador.setClave(contrasena);
-        }
-
-        return ((validarCorreo(comprador, filenom) == true) && (validarContrasena(comprador, filenom) == true));
+        return false;
     }
 }
