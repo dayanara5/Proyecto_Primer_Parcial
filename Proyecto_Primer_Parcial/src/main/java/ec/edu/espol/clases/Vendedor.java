@@ -9,8 +9,14 @@ import static ec.edu.espol.clases.Hash.toHexString;
 import static ec.edu.espol.clases.Utilitaria.inicioSesion;
 import static ec.edu.espol.clases.Utilitaria.validarCorreo;
 import static ec.edu.espol.clases.Utilitaria.validarPlaca;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -38,7 +44,7 @@ public class Vendedor extends Persona {
 
     public Vendedor(String nombre, String apellidos, String organizacion, String correoElectronico, String clave) {
         super(nombre, apellidos, organizacion, correoElectronico, clave);
-       
+
     }
 
     public Vendedor(String correoElectronico, String clave) {
@@ -142,9 +148,46 @@ public class Vendedor extends Persona {
         return vendedor;
     }
 
-    public void aceptarOferta(Vehiculo vehi, Oferta ofer) {
-        vehiculos.remove(vehi);
+    public void aceptarOferta(Vehiculo vehi, Oferta ofer) throws FileNotFoundException, IOException {
+
         enviarConGMail(ofer.getComprador().getCorreoElectronico(), "Notificación", "Se aceptado la oferta");
+
+        vehiculos.remove(vehi);
+        String lineToRemove = null;
+
+        try (Scanner sc = new Scanner(new File("vehiculos.txt"))) {
+            while (sc.hasNextLine()) {
+                String linea = sc.nextLine();
+                String[] tokens = linea.split("\\|");
+                if (tokens[0].equals(vehi.getPlaca())) {
+                    lineToRemove = linea;
+                }
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        File inputFile = new File("vehiculos.txt");
+        File tempFile = new File("myTempFile.txt");
+
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+        String currentLine;
+
+        while ((currentLine = reader.readLine()) != null) {
+            // trim newline when comparing with lineToRemove
+            String trimmedLine = currentLine.trim();
+            if (trimmedLine.equals(lineToRemove)) {
+                continue;
+            }
+            writer.write(currentLine + System.getProperty("line.separator"));
+        }
+        writer.close();
+        reader.close();
+        boolean successful = tempFile.renameTo(inputFile);
+
     }
 
     private static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
@@ -193,7 +236,7 @@ public class Vendedor extends Persona {
         String tipo = sc.nextLine();
 
         ArrayList<Vehiculo> veh = new ArrayList<>();
-        
+
         do {
             if (tipo.equals("auto")) {
 
@@ -241,11 +284,11 @@ public class Vendedor extends Persona {
                 System.out.println(("Ingrese el precio de su vehiculo: "));
                 double precio = sc.nextDouble();
                 sc.nextLine();
-                
+
                 Auto a = new Auto(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, precio);
                 veh.add(a);
                 vendedor.setVehiculos(veh);
-                
+
                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
                     pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + vidrios + "|" + transmision + "|" + precio);
                 } catch (Exception e) {
@@ -282,7 +325,7 @@ public class Vendedor extends Persona {
                 System.out.println(("Ingrese el kilometraje: "));
                 double kilometraje = sc.nextDouble();
                 sc.nextLine();
-                
+
                 System.out.println(("Ingrese el color: "));
                 String color = sc.nextLine();
 
@@ -292,20 +335,20 @@ public class Vendedor extends Persona {
                 System.out.println(("Ingrese el precio de su vehiculo: "));
                 double precio = sc.nextDouble();
                 sc.nextLine();
-                
+
                 Vehiculo v = new Vehiculo(placaMoto, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, precio);
-                
+
                 veh.add(v);
                 vendedor.setVehiculos(veh);
-                
+
                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
                     pw.println(placaMoto + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + precio);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
-                
+
                 return vendedor;
-                
+
             } else if (tipo.equals("camionetas")) {
 
                 System.out.println(("Ingrese la placa: "));
@@ -339,7 +382,7 @@ public class Vendedor extends Persona {
                 System.out.println(("Ingrese el kilometraje: "));
                 double kilometraje = sc.nextDouble();
                 sc.nextLine();
-                
+
                 System.out.println(("Ingrese el color: "));
                 String color = sc.nextLine();
 
@@ -358,12 +401,12 @@ public class Vendedor extends Persona {
                 System.out.println(("Ingrese el precio de su vehiculo: "));
                 double precio = sc.nextDouble();
                 sc.nextLine();
-                
+
                 Camioneta c = new Camioneta(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, traccion, precio);
 
                 veh.add(c);
                 vendedor.setVehiculos(veh);
-                
+
                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
                     pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + vidrios + "|" + transmision + "|" + traccion + "|" + precio);
                 } catch (Exception e) {
@@ -375,38 +418,116 @@ public class Vendedor extends Persona {
             }
         } while (tipo.isBlank());
 
-     return null;   
+        return null;
     }
 
+    public static void revisarOfertas() throws IOException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Ingrese correo");
+        String correo = sc.nextLine();
+        System.out.println("Ingrese contraseña");
+        String contrasena = sc.nextLine();
 
-    /* public void revisarOfertas() {
-        Scanner sn = new Scanner(System.in);
-        System.out.println("Ingrese su correo electronico:");
-        String correo_elec = sn.nextLine();
-        System.out.println("Ingrese su contraseña:");
-        String contra = sn.nextLine();
-        boolean condicion = inicioSesion(correo_elec, contra, "vendedores");
-        if (condicion) {
-            Vehiculo vehiculo_1 = validarPlaca();
-            int opcion;
-            do {
-                int contador = 0;
-                Oferta oferta_1 = vehiculo_1.mostrarOferta(contador);
-                System.out.println("1. Siguiente oferta");
-                System.out.println("2. Aceptar Oferta");
-                opcion = sn.nextInt();
-                sn.nextLine();
-                switch (opcion) {
-                    case 1:
-                        int i = vehiculo_1.siguienteOferta(contador);
-                        contador = i;
-                        vehiculo_1.mostrarOferta(contador);
-                        break;
-                    case 2:
-                        aceptarOferta(vehiculo_1, oferta_1);
-                        break;
+        inicioSesion(correo, contrasena, "vendedores"); //Siempre retornara true por las condiciones del metodo
+
+        Vendedor v = new Vendedor(correo, contrasena);
+
+        System.out.println(("Ingrese la placa: "));
+        String placa = sc.nextLine();
+        boolean condicion = validarPlaca(placa);
+        System.out.println(condicion);
+        do {
+            if (condicion == false) {
+                System.out.println("Ingrese una nueva placa:");
+                placa = sc.nextLine();
+                condicion = validarPlaca(placa);
+            }
+
+        } while (condicion == false);
+
+        if (validarPlaca(placa)) {
+            for (Vehiculo vehiculo : v.getVehiculos()) {
+                if (vehiculo.getPlaca().equals(placa)) {
+                    System.out.println(vehiculo.getModelo());
+                    System.out.println("Precio: " + vehiculo.getPrecio());
+                    int opcion;
+                    int i = 0;
+                    ArrayList<Oferta> ofertas = vehiculo.getOfertas();
+                    System.out.println("Se han realizado" + ofertas.size() + "ofertas");
+                    if (i < ofertas.size()) {
+                        System.out.println("Correo: " + ofertas.get(i).getComprador().getCorreoElectronico());
+                        System.out.println("Precio ofertado: " + ofertas.get(i).getPrecio());
+                        if ((i < (ofertas.size() - 1)) && (i != 0)) { //limitando la opcion de avanzar solo hasta el penultimo item
+
+                            System.out.println("1.Siguiente opcion");
+                            System.out.println("2.Anterior opcion");
+                            System.out.println("3.Aceptar oferta");
+
+                            do {
+                                opcion = sc.nextInt();
+                                switch (opcion) {
+                                    case 1:
+                                        i += 1;
+                                        break;
+                                    case 2:
+                                        i -= 1;
+                                        break;
+                                    case 3:
+                                        v.aceptarOferta(vehiculo, ofertas.get(i));
+                                        break;
+                                    default:
+                                        System.out.println("Ingresa una opcion valida");
+                                        opcion = 10;
+                                }
+                            } while (opcion == 10);
+
+                        } else if (i == 0) { //limitando la opcion de solo avanzar en el primer item
+
+                            System.out.println("1.Siguiente opcion");
+
+                            System.out.println("2.Aceptar oferta");
+
+                            do {
+                                opcion = sc.nextInt();
+                                switch (opcion) {
+                                    case 1:
+                                        i += 1;
+                                        break;
+                                    case 2:
+                                        v.aceptarOferta(vehiculo, ofertas.get(i));
+                                        break;
+                                    default:
+                                        System.out.println("Ingresa una opcion valida");
+                                        opcion = 10;
+                                }
+                            } while (opcion == 10);
+
+                        } else if (i == ofertas.size() - 1) { //limita a que solo retroceda en el ultimo item
+                            System.out.println("1.Anterior opcion");
+
+                            System.out.println("2.Realizar oferta");
+
+                            do {
+                                opcion = sc.nextInt();
+                                switch (opcion) {
+                                    case 1:
+                                        i -= 1;
+                                        break;
+                                    case 2:
+                                        v.aceptarOferta(vehiculo, ofertas.get(i));
+                                        break;
+                                    default:
+                                        System.out.println("Ingresa una opcion valida");
+                                        opcion = 10;
+                                }
+                            } while (opcion == 10);
+
+                        }
+                    }
+
                 }
-            } 
+            }
         }
-    }*/
+
+    }
 }
