@@ -7,6 +7,7 @@ package ec.edu.espol.clases;
 import static ec.edu.espol.clases.Comprador.inicioSesion;
 import static ec.edu.espol.clases.Hash.getSHA;
 import static ec.edu.espol.clases.Hash.toHexString;
+import static ec.edu.espol.clases.Utilitaria.inicioSesion;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -43,7 +44,8 @@ public class Vendedor extends Persona {
         this.vehiculos = vehiculos;
     }
 
-    public void menuVendedor() throws NoSuchAlgorithmException {
+    public static void menuVendedor() throws NoSuchAlgorithmException {
+        
         System.out.println("1. Registrar nuevo Vendedor");
         System.out.println("2. Registrar un nuevo Vehiculo");
         System.out.println("3. Aceptar oferta");
@@ -154,7 +156,7 @@ public class Vendedor extends Persona {
         String correo_elec = sn.nextLine();
         System.out.println("Ingrese su contraseña:");
         String contra = sn.nextLine();
-        boolean condicion = inicioSesion(correo_elec, contra);
+        boolean condicion = inicioSesion(correo_elec, contra, "vendedores");
         if (condicion) {
             Vehiculo vehiculo_1 = validarPlaca();
             int opcion;
