@@ -1,0 +1,1 @@
+gte1234|toyota|land cruiser|manual|1995|10000.0|rojo|diesel|sip|mecanica|6000.0

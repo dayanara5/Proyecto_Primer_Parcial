@@ -72,7 +72,7 @@ public class Vendedor extends Persona {
                         registrarVendedor();
                         break;
                     case 2:
-
+                        registrarVehiculo();
                         break;
                     case 3:
 
@@ -178,7 +178,7 @@ public class Vendedor extends Persona {
         }
     }
 
-    public static Vendedor registrarVehiculo() {
+    public static void registrarVehiculo() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Ingrese correo");
         String correo = sc.nextLine();
@@ -224,6 +224,7 @@ public class Vendedor extends Persona {
 
                 System.out.println(("Ingrese el kilometraje: "));
                 double kilometraje = sc.nextDouble();
+                sc.nextLine();
 
                 System.out.println(("Ingrese el color: "));
                 String color = sc.nextLine();
@@ -237,9 +238,10 @@ public class Vendedor extends Persona {
                 System.out.println(("Ingrese transmision: "));
                 String transmision = sc.nextLine();
 
-                System.out.println(("Ingrese la placa: "));
+                System.out.println(("Ingrese el precio de su vehiculo: "));
                 double precio = sc.nextDouble();
-
+                sc.nextLine();
+                
                 Auto a = new Auto(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, precio);
 
                 veh.add(a);
@@ -251,9 +253,6 @@ public class Vendedor extends Persona {
                 }
 
             } else if (tipo.equals("moto")) {
-
-                System.out.println(("Ingrese la placa: "));
-                String placa = sc.nextLine();
 
                 System.out.println(("Ingrese la placa: "));
                 String placaMoto = sc.nextLine();
@@ -282,22 +281,24 @@ public class Vendedor extends Persona {
 
                 System.out.println(("Ingrese el kilometraje: "));
                 double kilometraje = sc.nextDouble();
-
+                sc.nextLine();
+                
                 System.out.println(("Ingrese el color: "));
                 String color = sc.nextLine();
 
                 System.out.println(("Ingrese el tipo de combustible: "));
                 String tipoCombustible = sc.nextLine();
 
-                System.out.println(("Ingrese la placa: "));
+                System.out.println(("Ingrese el precio de su vehiculo: "));
                 double precio = sc.nextDouble();
-
-                Vehiculo v = new Vehiculo(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, precio);
+                sc.nextLine();
+                
+                Vehiculo v = new Vehiculo(placaMoto, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, precio);
 
                 veh.add(v);
 
                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
-                    pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + precio);
+                    pw.println(placaMoto + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + precio);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -334,7 +335,8 @@ public class Vendedor extends Persona {
 
                 System.out.println(("Ingrese el kilometraje: "));
                 double kilometraje = sc.nextDouble();
-
+                sc.nextLine();
+                
                 System.out.println(("Ingrese el color: "));
                 String color = sc.nextLine();
 
@@ -350,9 +352,10 @@ public class Vendedor extends Persona {
                 System.out.println(("Ingrese traccion: "));
                 String traccion = sc.nextLine();
 
-                System.out.println(("Ingrese la placa: "));
+                System.out.println(("Ingrese el precio de su vehiculo: "));
                 double precio = sc.nextDouble();
-
+                sc.nextLine();
+                
                 Camioneta c = new Camioneta(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, traccion, precio);
 
                 veh.add(c);
@@ -368,7 +371,7 @@ public class Vendedor extends Persona {
             }
         } while (tipo.isBlank());
 
-        return vendedor;
+        
     }
 
 

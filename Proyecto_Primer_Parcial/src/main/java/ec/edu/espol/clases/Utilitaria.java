@@ -19,8 +19,6 @@ public class Utilitaria {
                 catch (Exception e) {
                     System.out.println("Exception thrown for incorrect algorithm: " + e);
                 }
-                System.out.println(contrasena);
-                System.out.println(contraHashP);
 
                 if (contraHashP.equals(contrasena)) {
                     return true;
@@ -38,21 +36,26 @@ public class Utilitaria {
             while (sc.hasNextLine()) {
                 String linea = sc.nextLine();
                 String[] tokens = linea.split("\\|");
+                String correo = tokens[3];
                 String contrasena = tokens[4];
                 String contraHashP = null;
-                try {
-                    contraHashP = Hash.toHexString(getSHA(v.getClave()));
-                } // For specifying wrong message digest algorithms
-                catch (Exception e) {
-                    System.out.println("Exception thrown for incorrect algorithm: " + e);
-                }
-                System.out.println(contrasena);
-                System.out.println(contraHashP);
-
-                if (contraHashP.equals(contrasena)) {
+                System.out.println(linea);
+                
+                if ((correo.equals(v.getCorreoElectronico())) == true ) {
+                    try {
+                        contraHashP = Hash.toHexString(getSHA(v.getClave()));
+                    } // For specifying wrong message digest algorithms
+                    catch (Exception e) {
+                        System.out.println("Exception thrown for incorrect algorithm: " + e);
+                    }
+                    if (contraHashP.equals(contrasena)) {
                     return true;
+                    }
+                    
                 }
-
+                else if((correo.equals(v.getCorreoElectronico())) == false )
+                    sc.nextLine();
+                    
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -103,13 +106,13 @@ public class Utilitaria {
             Vendedor vendedor = new Vendedor(correo, contrasena);
             while (validarCorreo(vendedor, filenom) == false) {
                 System.out.println("Correo invalido, ingrese uno existente");
-                correo = sc.next();
+                correo = sc.nextLine();
                 vendedor.setCorreoElectronico(correo);
             }
 
             while (validarContrasena(vendedor, filenom) == false) {
                 System.out.println("Contrasena invalida, intentelo de nuevo");
-                contrasena = sc.next();
+                contrasena = sc.nextLine();
                 vendedor.setClave(contrasena);
             }
 
@@ -118,13 +121,13 @@ public class Utilitaria {
             Comprador comprador = new Comprador(correo, contrasena);
             while (validarCorreo(comprador, filenom) == false) {
                 System.out.println("Correo invalido, ingrese uno existente");
-                correo = sc.next();
+                correo = sc.nextLine();
                 comprador.setCorreoElectronico(correo);
             }
 
             while (validarContrasena(comprador, filenom) == false) {
                 System.out.println("Contrasena invalida, intentelo de nuevo");
-                contrasena = sc.next();
+                contrasena = sc.nextLine();
                 comprador.setClave(contrasena);
             }
 
