@@ -28,7 +28,7 @@ public class Proyecto_Primer_Parcial {
         do{        
         switch(opcion){
             case 1:
-               // menuVendedor();
+                menuVendedor();
             case 2:
                 opcionesComprador();
             case 3:
