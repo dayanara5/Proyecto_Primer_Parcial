@@ -4,6 +4,7 @@
  */
 package ec.edu.espol.clases;
 
+import static ec.edu.espol.clases.Comprador.inicioSesion;
 import static ec.edu.espol.clases.Hash.getSHA;
 import static ec.edu.espol.clases.Hash.toHexString;
 import java.security.NoSuchAlgorithmException;
@@ -61,7 +62,7 @@ public class Vendedor extends Persona {
                 break;
 
             case 3:
-
+                revisarOfertas();
                 break;
 
             case 4:
@@ -113,7 +114,7 @@ public class Vendedor extends Persona {
 
     public void aceptarOferta(Vehiculo vehi, Oferta ofer) {
         vehiculos.remove(vehi);
-        enviarConGMail(ofer.getComprador().getCorreoElectronico(),"Notificación","Se aceptado la oferta");
+        enviarConGMail(ofer.getComprador().getCorreoElectronico(), "Notificación", "Se aceptado la oferta");
     }
 
     private static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
@@ -144,6 +145,37 @@ public class Vendedor extends Persona {
             transport.close();
         } catch (MessagingException me) {
             me.printStackTrace();   //Si se produce un error
+        }
+    }
+
+    public void revisarOfertas() {
+        Scanner sn = new Scanner(System.in);
+        System.out.println("Ingrese su correo electronico:");
+        String correo_elec = sn.nextLine();
+        System.out.println("Ingrese su contraseña:");
+        String contra = sn.nextLine();
+        boolean condicion = inicioSesion(correo_elec, contra);
+        if (condicion) {
+            Vehiculo vehiculo_1 = validarPlaca();
+            int opcion;
+            do {
+                int contador=0;
+                Oferta oferta_1 = vehiculo_1.mostrarOferta(contador);
+                        System.out.println("1. Siguiente oferta");
+                        System.out.println("2. Aceptar Oferta");
+                opcion = sn.nextInt();
+                sn.nextLine();
+                switch(opcion){
+                    case 1:
+                        int i = vehiculo_1.siguienteOferta(contador);
+                        contador=i;
+                        vehiculo_1.mostrarOferta(contador);
+                        break;
+                    case 2:
+                        aceptarOferta(vehiculo_1, oferta_1);
+                        break;
+                }
+            } 
         }
     }
 }
