@@ -106,14 +106,14 @@ public class Comprador extends Persona {
                         tipovehiculo = 9;
                     } else if (tipo.equals("camionetas")) {
                         tipovehiculo = 12;
-                    } else if (tipo.isBlank()) {
+                    } else if (tipo.equals("no")) {
                         tipovehiculo = 1;
                     } else {
                         System.out.println("Ingrese un tipo de vehiculo valido");
                     }
                 } while (tipovehiculo == 0);
 
-                if (((tamano == 11) && (tipovehiculo == 11)) || (tipovehiculo == 1)) { //#de atributos que tendran los autos
+                if (((tamano == 11) && (tipovehiculo == 11)) || ((tipovehiculo == 1)&& (tamano==11))) { //#de atributos que tendran los autos
                     if ((Integer.parseInt(recorridoRango[0]) <= Integer.parseInt(tokens[5]))
                             || (Integer.parseInt(recorridoRango[1]) >= Integer.parseInt(tokens[5]))) {
                         if ((Integer.parseInt(anoRango[0]) <= Integer.parseInt(tokens[4]))
@@ -169,7 +169,7 @@ public class Comprador extends Persona {
                     }
                 }
 
-                if (((tamano == 9) && (tipovehiculo == 9)) || (tipovehiculo == 1)) { //#de atributos que tendran las motos
+                if (((tamano == 9) && (tipovehiculo == 9)) || ((tipovehiculo == 1)&& (tamano==9))) { //#de atributos que tendran las motos
                     if ((Integer.parseInt(recorridoRango[0]) <= Integer.parseInt(tokens[5]))
                             || (Integer.parseInt(recorridoRango[1]) >= Integer.parseInt(tokens[5]))) {
                         if ((Integer.parseInt(anoRango[0]) <= Integer.parseInt(tokens[4]))
@@ -223,7 +223,7 @@ public class Comprador extends Persona {
                         }
                     }
                 }
-                if (((tamano == 12) && (tipovehiculo == 12) || (tipovehiculo == 1))) { //#de atributos que tendran las camionetas
+                if (((tamano == 12) && (tipovehiculo == 12) || ((tipovehiculo == 1)&& (tamano==12)))) { //#de atributos que tendran las camionetas
                     if ((Integer.parseInt(recorridoRango[0]) <= Integer.parseInt(tokens[5]))
                             || (Integer.parseInt(recorridoRango[1]) >= Integer.parseInt(tokens[5]))) {
                         if ((Integer.parseInt(anoRango[0]) <= Integer.parseInt(tokens[4]))

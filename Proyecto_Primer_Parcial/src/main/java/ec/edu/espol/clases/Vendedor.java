@@ -29,7 +29,7 @@ import javax.mail.internet.MimeMessage;
  */
 public class Vendedor extends Persona {
 
-    private ArrayList<Vehiculo> vehiculos;
+    private ArrayList<Vehiculo> vehiculos = null;
 
     public Vendedor(ArrayList<Vehiculo> vehiculos, String nombres, String apellidos, String organizacion, String correoElectronico, String clave) {
         super(nombres, apellidos, organizacion, correoElectronico, clave);
@@ -38,11 +38,11 @@ public class Vendedor extends Persona {
 
     public Vendedor(String nombre, String apellidos, String organizacion, String correoElectronico, String clave) {
         super(nombre, apellidos, organizacion, correoElectronico, clave);
+       
     }
 
     public Vendedor(String correoElectronico, String clave) {
         super(null, null, null, correoElectronico, clave);
-        this.vehiculos = null;
     }
 
     public ArrayList<Vehiculo> getVehiculos() {
@@ -96,19 +96,19 @@ public class Vendedor extends Persona {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Ingresar nombres: ");
-        String nombres = sc.next();
+        String nombres = sc.nextLine();
 
         System.out.println("Ingresar apellidos: ");
-        String apellidos = sc.next();
+        String apellidos = sc.nextLine();
 
         System.out.println("Ingresar organización: ");
-        String organizacion = sc.next();
+        String organizacion = sc.nextLine();
 
         System.out.println("IngresarCorreoElectronico: ");
-        String correo = sc.next();
+        String correo = sc.nextLine();
 
         System.out.println("Ingresar Clave: ");
-        String clave = sc.next();
+        String clave = sc.nextLine();
         String claveHash = toHexString(getSHA(clave));
 
         Vendedor vendedor = new Vendedor(nombres, apellidos, organizacion, correo, claveHash);
@@ -178,7 +178,7 @@ public class Vendedor extends Persona {
         }
     }
 
-    public static void registrarVehiculo() {
+    public static Vendedor registrarVehiculo() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Ingrese correo");
         String correo = sc.nextLine();
@@ -193,7 +193,7 @@ public class Vendedor extends Persona {
         String tipo = sc.nextLine();
 
         ArrayList<Vehiculo> veh = new ArrayList<>();
-
+        
         do {
             if (tipo.equals("auto")) {
 
@@ -243,15 +243,15 @@ public class Vendedor extends Persona {
                 sc.nextLine();
                 
                 Auto a = new Auto(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, precio);
-
                 veh.add(a);
-
+                vendedor.setVehiculos(veh);
+                
                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
                     pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + vidrios + "|" + transmision + "|" + precio);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
-
+                return vendedor;
             } else if (tipo.equals("moto")) {
 
                 System.out.println(("Ingrese la placa: "));
@@ -294,15 +294,18 @@ public class Vendedor extends Persona {
                 sc.nextLine();
                 
                 Vehiculo v = new Vehiculo(placaMoto, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, precio);
-
+                
                 veh.add(v);
-
+                vendedor.setVehiculos(veh);
+                
                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
                     pw.println(placaMoto + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + precio);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
-
+                
+                return vendedor;
+                
             } else if (tipo.equals("camionetas")) {
 
                 System.out.println(("Ingrese la placa: "));
@@ -359,19 +362,20 @@ public class Vendedor extends Persona {
                 Camioneta c = new Camioneta(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, traccion, precio);
 
                 veh.add(c);
-
+                vendedor.setVehiculos(veh);
+                
                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
                     pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + vidrios + "|" + transmision + "|" + traccion + "|" + precio);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
-
+                return vendedor;
             } else {
                 System.out.println("Ingrese un tipo de vehiculo valido");
             }
         } while (tipo.isBlank());
 
-        
+     return null;   
     }
 
 

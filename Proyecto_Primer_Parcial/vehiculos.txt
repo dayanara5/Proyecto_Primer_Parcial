@@ -1,1 +1,2 @@
 gte1234|toyota|land cruiser|manual|1995|10000.0|rojo|diesel|sip|mecanica|6000.0
+gt4567|shineray|crucero|manuel|2016|3000.0|rojo|gasolina|2000.0

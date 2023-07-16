@@ -39,7 +39,6 @@ public class Utilitaria {
                 String correo = tokens[3];
                 String contrasena = tokens[4];
                 String contraHashP = null;
-                System.out.println(linea);
                 
                 if ((correo.equals(v.getCorreoElectronico())) == true ) {
                     try {
@@ -51,11 +50,7 @@ public class Utilitaria {
                     if (contraHashP.equals(contrasena)) {
                     return true;
                     }
-                    
                 }
-                else if((correo.equals(v.getCorreoElectronico())) == false )
-                    sc.nextLine();
-                    
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
