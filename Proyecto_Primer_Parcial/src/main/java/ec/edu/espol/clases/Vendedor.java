@@ -4,11 +4,11 @@
  */
 package ec.edu.espol.clases;
 
-
 import static ec.edu.espol.clases.Hash.getSHA;
 import static ec.edu.espol.clases.Hash.toHexString;
 import static ec.edu.espol.clases.Utilitaria.inicioSesion;
 import static ec.edu.espol.clases.Utilitaria.validarCorreo;
+import static ec.edu.espol.clases.Utilitaria.validarPlaca;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -178,7 +178,201 @@ public class Vendedor extends Persona {
         }
     }
 
-   /* public void revisarOfertas() {
+    public static Vendedor registrarVehiculo() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Ingrese correo");
+        String correo = sc.nextLine();
+        System.out.println("Ingrese contraseña");
+        String contrasena = sc.nextLine();
+
+        inicioSesion(correo, contrasena, "vendedores"); //Siempre retornara true por las condiciones del metodo
+
+        Vendedor vendedor = new Vendedor(correo, contrasena);
+
+        System.out.println("Ingrese el tipo de vehiculo: ");
+        String tipo = sc.nextLine();
+
+        ArrayList<Vehiculo> veh = new ArrayList<>();
+
+        do {
+            if (tipo.equals("auto")) {
+
+                System.out.println(("Ingrese la placa: "));
+                String placa = sc.nextLine();
+                boolean condicion = validarPlaca(placa);
+                do {
+                    if (condicion == true) {
+                        System.out.println("Ingrese una nueva placa:");
+                        placa = sc.nextLine();
+                        condicion = validarPlaca(placa);
+                    }
+
+                } while (condicion == true);
+
+                System.out.println(("Ingrese la marca: "));
+                String marca = sc.nextLine();
+
+                System.out.println(("Ingrese el modelo: "));
+                String modelo = sc.nextLine();
+
+                System.out.println(("Ingrese el tipo de motor: "));
+                String tipoMotor = sc.nextLine();
+
+                System.out.println(("Ingrese el año: "));
+                int anio = sc.nextInt();
+                sc.nextLine();
+
+                System.out.println(("Ingrese el kilometraje: "));
+                double kilometraje = sc.nextDouble();
+
+                System.out.println(("Ingrese el color: "));
+                String color = sc.nextLine();
+
+                System.out.println(("Ingrese el tipo de combustible: "));
+                String tipoCombustible = sc.nextLine();
+
+                System.out.println(("Tiene vidrios? "));
+                String vidrios = sc.nextLine();
+
+                System.out.println(("Ingrese transmision: "));
+                String transmision = sc.nextLine();
+
+                System.out.println(("Ingrese la placa: "));
+                double precio = sc.nextDouble();
+
+                Auto a = new Auto(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, precio);
+
+                veh.add(a);
+
+                try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
+                    pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + vidrios + "|" + transmision + "|" + precio);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
+            } else if (tipo.equals("moto")) {
+
+                System.out.println(("Ingrese la placa: "));
+                String placa = sc.nextLine();
+
+                System.out.println(("Ingrese la placa: "));
+                String placaMoto = sc.nextLine();
+                boolean condicion = validarPlaca(placaMoto);
+                do {
+                    if (condicion == true) {
+                        System.out.println("Ingrese una nueva placa:");
+                        placaMoto = sc.nextLine();
+                        condicion = validarPlaca(placaMoto);
+                    }
+
+                } while (condicion == true);
+
+                System.out.println(("Ingrese la marca: "));
+                String marca = sc.nextLine();
+
+                System.out.println(("Ingrese el modelo: "));
+                String modelo = sc.nextLine();
+
+                System.out.println(("Ingrese el tipo de motor: "));
+                String tipoMotor = sc.nextLine();
+
+                System.out.println(("Ingrese el año: "));
+                int anio = sc.nextInt();
+                sc.nextLine();
+
+                System.out.println(("Ingrese el kilometraje: "));
+                double kilometraje = sc.nextDouble();
+
+                System.out.println(("Ingrese el color: "));
+                String color = sc.nextLine();
+
+                System.out.println(("Ingrese el tipo de combustible: "));
+                String tipoCombustible = sc.nextLine();
+
+                System.out.println(("Ingrese la placa: "));
+                double precio = sc.nextDouble();
+
+                Vehiculo v = new Vehiculo(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, precio);
+
+                veh.add(v);
+
+                try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
+                    pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + precio);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
+            } else if (tipo.equals("camionetas")) {
+
+                System.out.println(("Ingrese la placa: "));
+                String placa = sc.nextLine();
+
+                System.out.println(("Ingrese la placa: "));
+                String placaCamioneta = sc.nextLine();
+                boolean condicion = validarPlaca(placaCamioneta);
+                do {
+                    if (condicion == true) {
+                        System.out.println("Ingrese una nueva placa:");
+                        placaCamioneta = sc.nextLine();
+                        condicion = validarPlaca(placaCamioneta);
+                    }
+
+                } while (condicion == true);
+
+                System.out.println(("Ingrese la marca: "));
+                String marca = sc.nextLine();
+
+                System.out.println(("Ingrese el modelo: "));
+                String modelo = sc.nextLine();
+
+                System.out.println(("Ingrese el tipo de motor: "));
+                String tipoMotor = sc.nextLine();
+
+                System.out.println(("Ingrese el año: "));
+                int anio = sc.nextInt();
+                sc.nextLine();
+
+                System.out.println(("Ingrese el kilometraje: "));
+                double kilometraje = sc.nextDouble();
+
+                System.out.println(("Ingrese el color: "));
+                String color = sc.nextLine();
+
+                System.out.println(("Ingrese el tipo de combustible: "));
+                String tipoCombustible = sc.nextLine();
+
+                System.out.println(("Tiene vidrios? "));
+                String vidrios = sc.nextLine();
+
+                System.out.println(("Ingrese transmision: "));
+                String transmision = sc.nextLine();
+
+                System.out.println(("Ingrese traccion: "));
+                String traccion = sc.nextLine();
+
+                System.out.println(("Ingrese la placa: "));
+                double precio = sc.nextDouble();
+
+                Camioneta c = new Camioneta(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, traccion, precio);
+
+                veh.add(c);
+
+                try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
+                    pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + vidrios + "|" + transmision + "|" + traccion + "|" + precio);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
+            } else {
+                System.out.println("Ingrese un tipo de vehiculo valido");
+            }
+        } while (tipo.isBlank());
+
+        return vendedor;
+    }
+
+
+    /* public void revisarOfertas() {
         Scanner sn = new Scanner(System.in);
         System.out.println("Ingrese su correo electronico:");
         String correo_elec = sn.nextLine();
