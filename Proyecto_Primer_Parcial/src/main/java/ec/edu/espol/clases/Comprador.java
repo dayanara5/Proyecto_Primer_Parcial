@@ -417,7 +417,7 @@ public class Comprador extends Persona{
                  System.out.println(("tipo de combustible"+vehiculo.get(i).getTipoCombustible()));
                  System.out.println(("vidrios"+vehiculo.get(i).getVidrios()));
                  System.out.println(("transmision"+vehiculo.get(i).getTransmision()));
-                 System.out.println("traccion"+ vehiculo.get(i).getTraccion);
+                 System.out.println("traccion"+ vehiculo.get(i).getTraccion());
                  System.out.println(("precio"+vehiculo.get(i).getPrecio()));
                  System.out.println("");
                  if(i < (vehiculo.size()-1) && (i != 0)){ //limitando la opcion de avanzar solo hasta el penultimo item
