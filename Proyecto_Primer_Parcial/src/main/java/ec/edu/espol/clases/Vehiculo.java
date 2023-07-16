@@ -133,27 +133,22 @@ public class Vehiculo {
     public void setMotocicletas(String motocicletas) {
         this.motocicletas = motocicletas;
     }
-    public Oferta mostrarOferta(){
-        Oferta ele_oferta= ofertas.get(0);
+    public Oferta mostrarOferta(int indice){
+        Oferta ele_oferta= ofertas.get(indice);
         System.out.println("Correo:"+ele_oferta.getComprador().getCorreoElectronico());
         System.out.println("Precio ofertado:"+ele_oferta.getPrecio());
         return ele_oferta;
     }
-
-    String getTipoCombustible() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public int siguienteOferta(int indice){
+        if(indice<ofertas.size()-1){
+            return indice++;
+        }
+        return indice;
     }
-
-    String getVidrios() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public int anteriorOferta(int indice){
+        if(indice>0){
+            return indice--;
+        }
+        return indice;
     }
-
-    String getTransmision() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    String getTraccion() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-   
 }

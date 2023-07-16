@@ -335,6 +335,7 @@ public class Comprador extends Persona{
          int i=0;
          while( i<vehiculo.size()){
              if (vehiculo.get(i) instanceof Auto){ //mostrar toda la informacion del vehiculo si es un auto
+                 Auto tipo_auto= (Auto) vehiculo.get(i);
                  System.out.println(("placa"+vehiculo.get(i).getPlaca()));
                  System.out.println(("marca"+vehiculo.get(i).getMarca()));
                  System.out.println(("modelo"+vehiculo.get(i).getModelo()));
@@ -342,9 +343,9 @@ public class Comprador extends Persona{
                  System.out.println(("año de fabricación"+vehiculo.get(i).getAnio()));
                  System.out.println(("kilometraje"+vehiculo.get(i).getRecorrido()));
                  System.out.println(("color"+vehiculo.get(i).getColor()));
-                 System.out.println(("tipo de combustible"+vehiculo.get(i).getTipoCombustible()));
-                 System.out.println(("vidrios"+vehiculo.get(i).getVidrios()));
-                 System.out.println(("transmision"+vehiculo.get(i).getTransmision()));
+                 System.out.println(("tipo de combustible"+vehiculo.get(i).getCombustible()));
+                 System.out.println(("vidrios"+tipo_auto.getVidrios()));
+                 System.out.println(("transmision"+tipo_auto.getTransmision()));
                  System.out.println(("precio"+vehiculo.get(i).getPrecio()));
                  System.out.println("");
                  if((i < (vehiculo.size()-1)) && (i != 0)){ //limitando la opcion de avanzar solo hasta el penultimo item
@@ -461,6 +462,7 @@ public class Comprador extends Persona{
                  }
              }
              else if (vehiculo.get(i) instanceof Camioneta){ //mostrar toda la informacion del vehiculo si es una camioneta
+                 Camioneta tipo_camioneta= (Camioneta) vehiculo.get(i);
                  System.out.println(("placa"+vehiculo.get(i).getPlaca()));
                  System.out.println(("marca"+vehiculo.get(i).getMarca()));
                  System.out.println(("modelo"+vehiculo.get(i).getModelo()));
@@ -468,10 +470,10 @@ public class Comprador extends Persona{
                  System.out.println(("año de fabricación"+vehiculo.get(i).getAnio()));
                  System.out.println(("kilometraje"+vehiculo.get(i).getRecorrido()));
                  System.out.println(("color"+vehiculo.get(i).getColor()));
-                 System.out.println(("tipo de combustible"+vehiculo.get(i).getTipoCombustible()));
-                 System.out.println(("vidrios"+vehiculo.get(i).getVidrios()));
-                 System.out.println(("transmision"+vehiculo.get(i).getTransmision()));
-                 System.out.println("traccion"+ vehiculo.get(i).getTraccion());
+                 System.out.println(("tipo de combustible"+vehiculo.get(i).getCombustible()));
+                 System.out.println(("vidrios"+tipo_camioneta.getVidrios()));
+                 System.out.println(("transmision"+tipo_camioneta.getTransmicion()));
+                 System.out.println("traccion"+tipo_camioneta.getTraccion());
                  System.out.println(("precio"+vehiculo.get(i).getPrecio()));
                  System.out.println("");
                  if(i < (vehiculo.size()-1) && (i != 0)){ //limitando la opcion de avanzar solo hasta el penultimo item
@@ -596,7 +598,7 @@ public class Comprador extends Persona{
                  System.out.println(("año de fabricación"+vehiculo.get(i).getAnio()));
                  System.out.println(("kilometraje"+vehiculo.get(i).getRecorrido()));
                  System.out.println(("color"+vehiculo.get(i).getColor()));
-                 System.out.println(("tipo de combustible"+vehiculo.get(i).getTipoCombustible()));
+                 System.out.println(("tipo de combustible"+vehiculo.get(i).getCombustible()));
                  System.out.println(("precio"+vehiculo.get(i).getPrecio()));
                  System.out.println("");
                  if(i < (vehiculo.size()-1)&& (i != 0)){ //limitando la opcion de avanzar solo hasta el penultimo item
