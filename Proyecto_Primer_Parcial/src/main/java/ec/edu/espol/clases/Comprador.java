@@ -24,11 +24,15 @@ public class Comprador extends Persona {
 
     public Comprador(String correoElectronico, String clave) {
         super(null, null, null, correoElectronico, clave);
-        this.ofertas = null;
+        this.ofertas = new ArrayList<>();
     }
 
     public void setOfertas(ArrayList<Oferta> ofertas) {
         this.ofertas = ofertas;
+    }
+
+    public ArrayList<Oferta> getOfertas() {
+        return ofertas;
     }
 
     public static Comprador registrarComprador() {
@@ -90,33 +94,55 @@ public class Comprador extends Persona {
 
     public static ArrayList<Vehiculo> buscarVehiculo(String tipo, String recorrido, String ano, String precio) {
         ArrayList<Vehiculo> vehiculos = new ArrayList<>();
+        int hayValorRecorrido = 1;
+        int hayValorAno = 1;
+        int hayValorPrecio = 1;
+        String[] recorridoRango = null;
+        Double recorridoRango2 = 0.;
+        Double recorridoRango1 = 0.;
+        int anoRango2 = 0;
+        int anoRango1 = 0;
+        Double precioRango1 = 0.;
+        Double precioRango2 = 0.;
 
-        String[] recorridoRango = recorrido.split("-");
-        String[] anoRango = ano.split("-");
-        String[] precioRango = precio.split("-");
+        if (recorrido.equals("no") == true) {
+            hayValorRecorrido = 0;
+        } else {
+            recorridoRango = recorrido.split("-");
+            recorridoRango1 = Double.valueOf(recorridoRango[0]);
+            recorridoRango2 = (Double.valueOf(recorridoRango[1]));
+        }
 
-        Double recorridoRango1 = Double.valueOf(recorridoRango[0]);
-        Double recorridoRango2 = (Double.valueOf(recorridoRango[1]));
+        if (ano.equals("no") == true) {
+            hayValorAno = 0;
+        } else {
+            String[] anoRango = ano.split("-");
+            anoRango1 = Integer.parseInt(anoRango[0]);
+            anoRango2 = Integer.parseInt(anoRango[1]);
+        }
 
-        Double precioRango1 = Double.valueOf(precioRango[0]);
-        Double precioRango2 = Double.valueOf(precioRango[1]);
-
-        int anoRango1 = Integer.parseInt(anoRango[0]);
-        int anoRango2 = Integer.parseInt(anoRango[1]);
+        if (precio.equals("no") == true) {
+            hayValorPrecio = 0;
+        } else {
+            String[] precioRango = precio.split("-");
+            precioRango1 = Double.valueOf(precioRango[0]);
+            precioRango2 = Double.valueOf(precioRango[1]);
+        }
 
         try (Scanner sc = new Scanner(new File("vehiculos.txt"))) {
             while (sc.hasNextLine()) {
                 String linea = sc.nextLine();
                 String[] tokens = linea.split("\\|");
-
+                
                 int tamano = tokens.length;
-                while (!((tipo.equals("auto")) || (tipo.equals("moto")) || (tipo.equals("camioneta")) || (tipo.equals("nada")))) {
+     
+                while (!((tipo.equals("auto")) || (tipo.equals("moto")) || (tipo.equals("camioneta")) || (tipo.equals("no")))) {
                     System.out.println("Ingrese un tipo valido");
                     tipo = sc.nextLine();
 
                 }
-
-                if ((tipo.equals("auto") && (tamano == 11)) || (tipo.equals("nada"))) { //#de atributos que tendran los autos
+                
+                if ((tipo.equals("auto") && (tamano == 11)) || ((tipo.equals("no")) && (tamano == 11))) { //#de atributos que tendran los autos
                     if ((recorridoRango1 <= Double.valueOf(tokens[5]))
                             || (recorridoRango2 >= Double.valueOf(tokens[5]))) {
                         if ((anoRango1 <= Integer.parseInt(tokens[4]))
@@ -126,23 +152,23 @@ public class Comprador extends Persona {
                                 Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
+                            } else if (hayValorPrecio == 0) {
                                 Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
                             }
 
-                        } else if (ano.equals("no")) {
+                        } else if (hayValorAno == 0) {
                             if ((precioRango1) <= Double.valueOf(tokens[10])
                                     || (precioRango2 >= Double.valueOf(tokens[10]))) {
                                 Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
+                            } else if (hayValorPrecio == 0) {
                                 Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
                             }
                         }
-                    } else if (recorridoRango.equals("no")) {
+                    } else if (hayValorRecorrido == 0) {
                         if ((anoRango1 <= Integer.parseInt(tokens[4]))
                                 || (anoRango2 >= Integer.parseInt(tokens[4]))) {
                             if ((precioRango1) <= Double.valueOf(tokens[10])
@@ -150,27 +176,27 @@ public class Comprador extends Persona {
                                 Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
+                            } else if (hayValorPrecio == 0) {
                                 Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
                             }
 
-                        } else if (ano.equals("no")) {
+                        } else if (hayValorAno == 0) {
                             if ((precioRango1) <= Double.valueOf(tokens[10])
                                     || (precioRango2 >= Double.valueOf(tokens[10]))) {
                                 Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
+                            } else if (hayValorPrecio == 0) {
                                 Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
                             }
                         }
 
                     }
-
+                    
                 }
-                if ((tipo.equals("moto") && (tamano == 9)) || (tipo.equals("nada"))) { //#de atributos que tendran los autos
+                else if ((tipo.equals("moto") && (tamano == 9)) || ((tipo.equals("no"))) && (tamano ==9)) { //#de atributos que tendran los autos
                     if ((recorridoRango1 <= Double.valueOf(tokens[5]))
                             || (recorridoRango2 >= Double.valueOf(tokens[5]))) {
                         if ((anoRango1 <= Integer.parseInt(tokens[4]))
@@ -180,23 +206,23 @@ public class Comprador extends Persona {
                                 Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
+                            } else if (hayValorPrecio == 0) {
                                 Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
                             }
 
-                        } else if (ano.equals("no")) {
+                        } else if (hayValorAno == 0) {
                             if ((precioRango1) <= Double.valueOf(tokens[8])
                                     || (precioRango2 >= Double.valueOf(tokens[8]))) {
-                               Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
+                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
+                            } else if (hayValorPrecio == 0) {
                                 Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
                             }
                         }
-                    } else if (recorridoRango.equals("no")) {
+                    } else if (hayValorRecorrido == 0) {
                         if ((anoRango1 <= Integer.parseInt(tokens[4]))
                                 || (anoRango2 >= Integer.parseInt(tokens[4]))) {
                             if ((precioRango1) <= Double.valueOf(tokens[8])
@@ -204,91 +230,91 @@ public class Comprador extends Persona {
                                 Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
+                            } else if (hayValorPrecio == 0) {
                                 Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
                             }
 
-                        } else if (ano.equals("no")) {
+                        } else if (hayValorAno == 0) {
                             if ((precioRango1) <= Double.valueOf(tokens[8])
                                     || (precioRango2 >= Double.valueOf(tokens[8]))) {
                                 Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
+                            } else if (hayValorPrecio == 0) {
                                 Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
                             }
                         }
 
                     }
-
+                    
                 }
-                if ((tipo.equals("camioneta") && (tamano == 11)) || (tipo.equals("nada"))) { //#de atributos que tendran los autos
+                else if ((tipo.equals("camioneta") && ((tamano == 12))) || (tamano ==12  && (tipo.equals("no")))) { //#de atributos que tendran los autos
                     if ((recorridoRango1 <= Double.valueOf(tokens[5]))
                             || (recorridoRango2 >= Double.valueOf(tokens[5]))) {
                         if ((anoRango1 <= Integer.parseInt(tokens[4]))
                                 || (anoRango2 >= Integer.parseInt(tokens[4]))) {
                             if ((precioRango1) <= Double.valueOf(tokens[11])
                                     || (precioRango2 >= Double.valueOf(tokens[11]))) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                            } else if (hayValorPrecio == 0) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
                                 vehiculos.add(vehiculo);
                             }
 
-                        } else if (ano.equals("no")) {
+                        } else if (hayValorAno == 0) {
                             if ((precioRango1) <= Double.valueOf(tokens[11])
                                     || (precioRango2 >= Double.valueOf(tokens[11]))) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                            } else if (hayValorPrecio == 0) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
                                 vehiculos.add(vehiculo);
                             }
                         }
-                    } else if (recorridoRango.equals("no")) {
+                    } else if (hayValorRecorrido == 0) {
                         if ((anoRango1 <= Integer.parseInt(tokens[4]))
                                 || (anoRango2 >= Integer.parseInt(tokens[4]))) {
                             if ((precioRango1) <= Double.valueOf(tokens[11])
                                     || (precioRango2 >= Double.valueOf(tokens[11]))) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                            } else if (hayValorPrecio == 0) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
                                 vehiculos.add(vehiculo);
                             }
 
-                        } else if (ano.equals("no")) {
+                        } else if (hayValorAno == 0) {
                             if ((precioRango1) <= Double.valueOf(tokens[11])
                                     || (precioRango2 >= Double.valueOf(tokens[11]))) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
                                 vehiculos.add(vehiculo);
 
-                            } else if (precio.equals("no")) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                            } else if (hayValorPrecio == 0) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
                                 vehiculos.add(vehiculo);
+
                             }
                         }
 
                     }
-
+                    
                 }
                 
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(vehiculos.get(0));
 
-        return null;
+        return vehiculos;
     }
 
-    public static void hacerOferta() {
+    public static ArrayList<Oferta> hacerOferta() {
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Ingrese correo");
@@ -315,17 +341,17 @@ public class Comprador extends Persona {
         while (i < vehiculo.size()) {
             if (vehiculo.get(i) instanceof Auto) { //mostrar toda la informacion del vehiculo si es un auto
                 Auto tipo_auto = (Auto) vehiculo.get(i);
-                System.out.println(("placa" + vehiculo.get(i).getPlaca()));
-                System.out.println(("marca" + vehiculo.get(i).getMarca()));
-                System.out.println(("modelo" + vehiculo.get(i).getModelo()));
-                System.out.println(("tipo de motor" + vehiculo.get(i).getTipoMotor()));
-                System.out.println(("año de fabricación" + vehiculo.get(i).getAnio()));
-                System.out.println(("kilometraje" + vehiculo.get(i).getRecorrido()));
-                System.out.println(("color" + vehiculo.get(i).getColor()));
-                System.out.println(("tipo de combustible" + vehiculo.get(i).getCombustible()));
-                System.out.println(("vidrios" + tipo_auto.getVidrios()));
-                System.out.println(("transmision" + tipo_auto.getTransmision()));
-                System.out.println(("precio" + vehiculo.get(i).getPrecio()));
+                System.out.println(("placa: " + vehiculo.get(i).getPlaca()));
+                System.out.println(("marca: " + vehiculo.get(i).getMarca()));
+                System.out.println(("modelo: " + vehiculo.get(i).getModelo()));
+                System.out.println(("tipo de motor: " + vehiculo.get(i).getTipoMotor()));
+                System.out.println(("año de fabricación: " + vehiculo.get(i).getAnio()));
+                System.out.println(("kilometraje: " + vehiculo.get(i).getRecorrido()));
+                System.out.println(("color: " + vehiculo.get(i).getColor()));
+                System.out.println(("tipo de combustible: " + vehiculo.get(i).getCombustible()));
+                System.out.println(("vidrios: " + tipo_auto.getVidrios()));
+                System.out.println(("transmision: " + tipo_auto.getTransmision()));
+                System.out.println(("precio: " + vehiculo.get(i).getPrecio()));
 
                 if ((i < (vehiculo.size() - 1)) && (i != 0)) { //limitando la opcion de avanzar solo hasta el penultimo item
 
@@ -347,19 +373,24 @@ public class Comprador extends Persona {
                                 double oferton = sc.nextDouble();
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
-                                comprador.setOfertas(ofertasVehiculo);
+                                comprador.getOfertas().add(oferta);
+                                vehiculo.get(i).getOfertas().add(oferta);
+
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
-                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + oferta.getPrecio());
+                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
+
                                 opcion = 15; //#para cerrar el while
-                                i = 999999;//# para que se acabe el programa y realice la oferta
+                                i = vehiculo.size();
                                 break;
+                                
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
+                                break;
                         }
                     } while (opcion == 10);
 
@@ -381,19 +412,20 @@ public class Comprador extends Persona {
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
+                                vehiculo.get(i).getOfertas().add(oferta);
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
-                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + oferta.getPrecio());
+                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
                                 opcion = 15;
-                                i = 999999;//# para que se acabe el programa y realice la oferta
-
+                                i = vehiculo.size();
                                 break;
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
+                                break;
                         }
                     } while (opcion == 10);
 
@@ -414,19 +446,20 @@ public class Comprador extends Persona {
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
+                                vehiculo.get(i).getOfertas().add(oferta);
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
-                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + oferta.getPrecio());
+                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
                                 opcion = 15;
-                                i = 999999;//# para que se acabe el programa y realice la oferta
-
+                                i = vehiculo.size();
                                 break;
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
+                                break;
                         }
                     } while (opcion == 10);
 
@@ -467,19 +500,21 @@ public class Comprador extends Persona {
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
+                                vehiculo.get(i).getOfertas().add(oferta);
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
-                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + oferta.getPrecio());
+                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
                                 opcion = 15;
-                                i = 999999; //# para que se acabe el programa y realice la oferta
+                                i = vehiculo.size();
                                 break;
 
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
+                                break;
                         }
                     } while (opcion == 10);
 
@@ -501,19 +536,22 @@ public class Comprador extends Persona {
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
+                                vehiculo.get(i).getOfertas().add(oferta);
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
-                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + oferta.getPrecio());
+                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
                                 opcion = 15;
-                                i = 999999;//# para que se acabe el programa y realice la oferta
-
+                                i = vehiculo.size();
                                 break;
+                                
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
+                                
+                                break;
                         }
                     } while (opcion == 10);
 
@@ -534,19 +572,20 @@ public class Comprador extends Persona {
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
+                                vehiculo.get(i).getOfertas().add(oferta);
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
-                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + oferta.getPrecio());
+                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
                                 opcion = 15;
-                                i = 999999;//# para que se acabe el programa y realice la oferta
-
-                                break;
+                                i = vehiculo.size();
+                                break; 
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
+                                break;
                         }
                     } while (opcion == 10);
 
@@ -584,18 +623,20 @@ public class Comprador extends Persona {
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
+                                vehiculo.get(i).getOfertas().add(oferta);
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
-                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + oferta.getPrecio());
+                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
+                                i = vehiculo.size();
                                 opcion = 15;
-                                i = 999999;
                                 break;
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
+                                break;
                         }
                     } while (opcion == 10);
 
@@ -617,19 +658,20 @@ public class Comprador extends Persona {
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
+                                vehiculo.get(i).getOfertas().add(oferta);
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
-                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + oferta.getPrecio());
+                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
                                 opcion = 15;
-                                i = 999999;//# para que se acabe el programa y realice la oferta
-
+                                i = vehiculo.size();
                                 break;
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
+                                break;
                         }
                     } while (opcion == 10);
 
@@ -650,58 +692,57 @@ public class Comprador extends Persona {
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
+                                vehiculo.get(i).getOfertas().add(oferta);
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
-                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + oferta.getPrecio());
+                                            + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
-                                opcion = 15;
-                                i = 999999;//# para que se acabe el programa y realice la oferta
 
+                                opcion = 15;
+                                i = vehiculo.size();
                                 break;
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
+                                break;
                         }
                     } while (opcion == 10);
 
                 }
             }
         }
+        return ofertasVehiculo;
     }
 
     public static void opcionesComprador() {
         Scanner sc = new Scanner(System.in);
-        boolean salir = false;
+
         int opcion;
 
-        while (!salir) {
+        do {
             System.out.println("1.Registrar un nuevo comprador");
             System.out.println("2.Ofertar por un vehiculo");
             System.out.println("3.Salir");
 
-            try {
-                System.out.println("Eliga que desea hacer");
-                opcion = sc.nextInt();
-                switch (opcion) {
-                    case 1:
-                        registrarComprador();
-                        break;
-                    case 2:
-                        hacerOferta();
-                        break;
-                    case 3:
-                        salir = true;
-                    default:
-                        System.out.println("Eliga una opcion valida");
+            System.out.println("Eliga que desea hacer");
+            opcion = sc.nextInt();
+            switch (opcion) {
+                case 1:
+                    registrarComprador();
+                    break;
+                case 2:
+                    hacerOferta();
+                    break;
+                case 3:
+                    break;
+                default:
+                    System.out.println("Eliga una opcion valida");
 
-                }
-            } catch (Exception e) {
-                System.out.println("Debes escribir un numero");
-                sc.next();
             }
-        }
+        } while (opcion != 3);
+
         System.out.println("Regresando al menu anterior");
     }
 

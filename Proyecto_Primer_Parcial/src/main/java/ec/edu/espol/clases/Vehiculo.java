@@ -34,8 +34,11 @@ public class Vehiculo {
         this.color = color;
         this.combustible = combustible;
         this.precio = precio;
-
+        this.vendedor= null;
+        this.ofertas= new ArrayList<>();
     }
+    
+    
 
     public String getPlaca() {
         return placa;
@@ -125,22 +128,5 @@ public class Vehiculo {
         this.vendedor = vendedor;
     }
 
-    public Oferta mostrarOferta(int indice){
-        Oferta ele_oferta= ofertas.get(indice);
-        System.out.println("Correo:"+ele_oferta.getComprador().getCorreoElectronico());
-        System.out.println("Precio ofertado:"+ele_oferta.getPrecio());
-        return ele_oferta;
-    }
-    public int siguienteOferta(int indice){
-        if(indice<ofertas.size()-1){
-            return indice++;
-        }
-        return indice;
-    }
-    public int anteriorOferta(int indice){
-        if(indice>0){
-            return indice--;
-        }
-        return indice;
-    }
+    
 }

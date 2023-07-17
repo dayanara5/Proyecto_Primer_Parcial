@@ -35,7 +35,7 @@ import javax.mail.internet.MimeMessage;
  */
 public class Vendedor extends Persona {
 
-    private ArrayList<Vehiculo> vehiculos = null;
+    private ArrayList<Vehiculo> vehiculos;
 
     public Vendedor(ArrayList<Vehiculo> vehiculos, String nombres, String apellidos, String organizacion, String correoElectronico, String clave) {
         super(nombres, apellidos, organizacion, correoElectronico, clave);
@@ -44,11 +44,13 @@ public class Vendedor extends Persona {
 
     public Vendedor(String nombre, String apellidos, String organizacion, String correoElectronico, String clave) {
         super(nombre, apellidos, organizacion, correoElectronico, clave);
+        this.vehiculos= new ArrayList<>();
 
     }
 
     public Vendedor(String correoElectronico, String clave) {
         super(null, null, null, correoElectronico, clave);
+        this.vehiculos= new ArrayList<>();
     }
 
     public ArrayList<Vehiculo> getVehiculos() {
@@ -59,42 +61,39 @@ public class Vendedor extends Persona {
         this.vehiculos = vehiculos;
     }
 
-    public static void menuVendedor() {
+    public static void menuVendedor() throws NoSuchAlgorithmException, IOException {
         Scanner sc = new Scanner(System.in);
-        boolean salir = false;
+        
         int opcion;
 
-        while (!salir) {
+        do {
             System.out.println("1.Registrar un nuevo vendedor");
             System.out.println("2.Registrar un nuevo vehiculo");
-            System.out.println("3.Aceptar oferta");
+            System.out.println("3.Revisar oferta");
             System.out.println("4.Salir");
 
-            try {
-                System.out.println("Eliga que desea hacer");
-                opcion = sc.nextInt();
-                switch (opcion) {
-                    case 1:
-                        registrarVendedor();
-                        break;
-                    case 2:
-                        registrarVehiculo();
-                        break;
-                    case 3:
+            System.out.println("Eliga que desea hacer");
+            opcion = sc.nextInt();
+            switch (opcion) {
+                case 1:
+                    registrarVendedor();
+                    break;
+                case 2:
+                    registrarVehiculo();
+                    break;
+                case 3:
+                    revisarOfertas();
+                    break;
 
-                        break;
+                case 4:
+                    break;
 
-                    case 4:
-                        salir = true;
-                    default:
-                        System.out.println("Eliga una opcion valida");
+                default:
+                    System.out.println("Eliga una opcion valida");
 
-                }
-            } catch (Exception e) {
-                System.out.println("Debes escribir un numero");
-                sc.next();
             }
-        }
+        } while (opcion != 4);
+
         System.out.println("Regresando al menu anterior");
     }
 
@@ -192,9 +191,9 @@ public class Vendedor extends Persona {
 
     private static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
         //La dirección de correo de envío
-        String remitente = "remitente@gmail.com";
+        String remitente = "smorales508@gmail.com";
         //La clave de aplicación obtenida según se explica en este artículo:
-        String claveemail = "1234567890123456";
+        String claveemail = "vqcjjtkaxcjczhaz";
 
         Properties props = System.getProperties();
         props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
@@ -287,7 +286,7 @@ public class Vendedor extends Persona {
 
                 Auto a = new Auto(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, precio);
                 veh.add(a);
-                vendedor.setVehiculos(veh);
+                vendedor.getVehiculos().add(a);
 
                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
                     pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + vidrios + "|" + transmision + "|" + precio);
@@ -349,10 +348,9 @@ public class Vendedor extends Persona {
 
                 return vendedor;
 
-            } else if (tipo.equals("camionetas")) {
+            } else if (tipo.equals("camioneta")) {
 
-                System.out.println(("Ingrese la placa: "));
-                String placa = sc.nextLine();
+                
 
                 System.out.println(("Ingrese la placa: "));
                 String placaCamioneta = sc.nextLine();
@@ -402,13 +400,13 @@ public class Vendedor extends Persona {
                 double precio = sc.nextDouble();
                 sc.nextLine();
 
-                Camioneta c = new Camioneta(placa, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, traccion, precio);
+                Camioneta c = new Camioneta(placaCamioneta, marca, modelo, tipoMotor, anio, kilometraje, color, tipoCombustible, vidrios, transmision, traccion, precio);
 
                 veh.add(c);
                 vendedor.setVehiculos(veh);
 
                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("vehiculos.txt"), true))) {
-                    pw.println(placa + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + vidrios + "|" + transmision + "|" + traccion + "|" + precio);
+                    pw.println(placaCamioneta + "|" + marca + "|" + modelo + "|" + tipoMotor + "|" + anio + "|" + kilometraje + "|" + color + "|" + tipoCombustible + "|" + vidrios + "|" + transmision + "|" + traccion + "|" + precio);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -435,7 +433,7 @@ public class Vendedor extends Persona {
         System.out.println(("Ingrese la placa: "));
         String placa = sc.nextLine();
         boolean condicion = validarPlaca(placa);
-        System.out.println(condicion);
+        
         do {
             if (condicion == false) {
                 System.out.println("Ingrese una nueva placa:");
@@ -444,8 +442,10 @@ public class Vendedor extends Persona {
             }
 
         } while (condicion == false);
-
-        if (validarPlaca(placa)) {
+        System.out.println(condicion);
+        
+        if (validarPlaca(placa)==true) {
+            System.out.println(v.getVehiculos().size());
             for (Vehiculo vehiculo : v.getVehiculos()) {
                 if (vehiculo.getPlaca().equals(placa)) {
                     System.out.println(vehiculo.getModelo());
