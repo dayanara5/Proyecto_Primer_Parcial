@@ -68,7 +68,7 @@ public class Comprador extends Persona {
                     System.out.println(e.getMessage());
                 }
                 return Ncomprador;
-            } else if(condicion == true) {
+            } else if (condicion == true) {
                 System.out.println("El correo ya ha sido registrado, ingrese uno nuevo");
                 System.out.println("Ingrese un correo valido: ");
                 correo = sc.nextLine();
@@ -85,212 +85,206 @@ public class Comprador extends Persona {
             }
 
         } while (condicion);
-    return null;
+        return null;
     }
 
     public static ArrayList<Vehiculo> buscarVehiculo(String tipo, String recorrido, String ano, String precio) {
         ArrayList<Vehiculo> vehiculos = new ArrayList<>();
+
         String[] recorridoRango = recorrido.split("-");
         String[] anoRango = ano.split("-");
         String[] precioRango = precio.split("-");
+
+        Double recorridoRango1 = Double.valueOf(recorridoRango[0]);
+        Double recorridoRango2 = (Double.valueOf(recorridoRango[1]));
+
+        Double precioRango1 = Double.valueOf(precioRango[0]);
+        Double precioRango2 = Double.valueOf(precioRango[1]);
+
+        int anoRango1 = Integer.parseInt(anoRango[0]);
+        int anoRango2 = Integer.parseInt(anoRango[1]);
+
         try (Scanner sc = new Scanner(new File("vehiculos.txt"))) {
             while (sc.hasNextLine()) {
                 String linea = sc.nextLine();
                 String[] tokens = linea.split("\\|");
+
                 int tamano = tokens.length;
-                int tipovehiculo = 0;
-                do {
-                    if (tipo.equals("auto")) {
-                        tipovehiculo = 11;
-                    } else if (tipo.equals("moto")) {
-                        tipovehiculo = 9;
-                    } else if (tipo.equals("camionetas")) {
-                        tipovehiculo = 12;
-                    } else if (tipo.equals("no")) {
-                        tipovehiculo = 1;
-                    } else {
-                        System.out.println("Ingrese un tipo de vehiculo valido");
-                    }
-                } while (tipovehiculo == 0);
+                while (!((tipo.equals("auto")) || (tipo.equals("moto")) || (tipo.equals("camioneta")) || (tipo.equals("nada")))) {
+                    System.out.println("Ingrese un tipo valido");
+                    tipo = sc.nextLine();
 
-                if (((tamano == 11) && (tipovehiculo == 11)) || ((tipovehiculo == 1)&& (tamano==11))) { //#de atributos que tendran los autos
-                    if ((Integer.parseInt(recorridoRango[0]) <= Integer.parseInt(tokens[5]))
-                            || (Integer.parseInt(recorridoRango[1]) >= Integer.parseInt(tokens[5]))) {
-                        if ((Integer.parseInt(anoRango[0]) <= Integer.parseInt(tokens[4]))
-                                || (Integer.parseInt(anoRango[1]) >= Integer.parseInt(tokens[4]))) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
+                }
+
+                if ((tipo.equals("auto") && (tamano == 11)) || (tipo.equals("nada"))) { //#de atributos que tendran los autos
+                    if ((recorridoRango1 <= Double.valueOf(tokens[5]))
+                            || (recorridoRango2 >= Double.valueOf(tokens[5]))) {
+                        if ((anoRango1 <= Integer.parseInt(tokens[4]))
+                                || (anoRango2 >= Integer.parseInt(tokens[4]))) {
+                            if ((precioRango1) <= Double.valueOf(tokens[10])
+                                    || (precioRango2 >= Double.valueOf(tokens[10]))) {
+                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
-                            } else if (precio.isBlank()) {
-                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
-                                vehiculos.add(vehiculo);
-                            }
-                        } else if (ano.isBlank()) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
+
+                            } else if (precio.equals("no")) {
+                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
                             }
-                        } else if (precio.isBlank()) {
-                            Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3],
-                                    Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
-                            vehiculos.add(vehiculo);
+
+                        } else if (ano.equals("no")) {
+                            if ((precioRango1) <= Double.valueOf(tokens[10])
+                                    || (precioRango2 >= Double.valueOf(tokens[10]))) {
+                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
+                                vehiculos.add(vehiculo);
+
+                            } else if (precio.equals("no")) {
+                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
+                                vehiculos.add(vehiculo);
+                            }
                         }
-                    } else if (recorrido.isBlank()) {
-                        if ((Integer.parseInt(anoRango[0]) <= Integer.parseInt(tokens[4]))
-                                || (Integer.parseInt(anoRango[1]) >= Integer.parseInt(tokens[4]))) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
+                    } else if (recorridoRango.equals("no")) {
+                        if ((anoRango1 <= Integer.parseInt(tokens[4]))
+                                || (anoRango2 >= Integer.parseInt(tokens[4]))) {
+                            if ((precioRango1) <= Double.valueOf(tokens[10])
+                                    || (precioRango2 >= Double.valueOf(tokens[10]))) {
+                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
-                            } else if (precio.isBlank()) {
-                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
-                                vehiculos.add(vehiculo);
-                            }
-                        } else if (ano.isBlank()) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
+
+                            } else if (precio.equals("no")) {
+                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
                                 vehiculos.add(vehiculo);
                             }
-                        } else if (precio.isBlank()) {
-                            Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3],
-                                    Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
-                            vehiculos.add(vehiculo);
+
+                        } else if (ano.equals("no")) {
+                            if ((precioRango1) <= Double.valueOf(tokens[10])
+                                    || (precioRango2 >= Double.valueOf(tokens[10]))) {
+                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
+                                vehiculos.add(vehiculo);
+
+                            } else if (precio.equals("no")) {
+                                Auto vehiculo = new Auto(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], Double.parseDouble(tokens[10]));
+                                vehiculos.add(vehiculo);
+                            }
                         }
 
                     }
-                }
 
-                if (((tamano == 9) && (tipovehiculo == 9)) || ((tipovehiculo == 1)&& (tamano==9))) { //#de atributos que tendran las motos
-                    if ((Integer.parseInt(recorridoRango[0]) <= Integer.parseInt(tokens[5]))
-                            || (Integer.parseInt(recorridoRango[1]) >= Integer.parseInt(tokens[5]))) {
-                        if ((Integer.parseInt(anoRango[0]) <= Integer.parseInt(tokens[4]))
-                                || (Integer.parseInt(anoRango[1]) >= Integer.parseInt(tokens[4]))) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
-                                vehiculos.add(vehiculo);
-                            } else if (precio.isBlank()) {
-                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
-                                vehiculos.add(vehiculo);
-                            }
-                        } else if (ano.isBlank()) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
-                                vehiculos.add(vehiculo);
-                            }
-                        } else if (precio.isBlank()) {
-                            Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3],
-                                    Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
-                            vehiculos.add(vehiculo);
-                        }
-                    } else if (recorrido.isBlank()) {
-                        if ((Integer.parseInt(anoRango[0]) <= Integer.parseInt(tokens[4]))
-                                || (Integer.parseInt(anoRango[1]) >= Integer.parseInt(tokens[4]))) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
-                                vehiculos.add(vehiculo);
-                            } else if (precio.isBlank()) {
-                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
-                                vehiculos.add(vehiculo);
-                            }
-                        } else if (ano.isBlank()) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
-                                vehiculos.add(vehiculo);
-                            }
-                        } else if (precio.isBlank()) {
-                            Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3],
-                                    Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
-                            vehiculos.add(vehiculo);
-                        }
-                    }
                 }
-                if (((tamano == 12) && (tipovehiculo == 12) || ((tipovehiculo == 1)&& (tamano==12)))) { //#de atributos que tendran las camionetas
-                    if ((Integer.parseInt(recorridoRango[0]) <= Integer.parseInt(tokens[5]))
-                            || (Integer.parseInt(recorridoRango[1]) >= Integer.parseInt(tokens[5]))) {
-                        if ((Integer.parseInt(anoRango[0]) <= Integer.parseInt(tokens[4]))
-                                || (Integer.parseInt(anoRango[1]) >= Integer.parseInt(tokens[4]))) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6],
-                                        tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
+                if ((tipo.equals("moto") && (tamano == 9)) || (tipo.equals("nada"))) { //#de atributos que tendran los autos
+                    if ((recorridoRango1 <= Double.valueOf(tokens[5]))
+                            || (recorridoRango2 >= Double.valueOf(tokens[5]))) {
+                        if ((anoRango1 <= Integer.parseInt(tokens[4]))
+                                || (anoRango2 >= Integer.parseInt(tokens[4]))) {
+                            if ((precioRango1) <= Double.valueOf(tokens[8])
+                                    || (precioRango2 >= Double.valueOf(tokens[8]))) {
+                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
-                            } else if (precio.isBlank()) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6],
-                                        tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
+
+                            } else if (precio.equals("no")) {
+                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
                             }
-                        } else if (ano.isBlank()) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6],
-                                        tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
+
+                        } else if (ano.equals("no")) {
+                            if ((precioRango1) <= Double.valueOf(tokens[8])
+                                    || (precioRango2 >= Double.valueOf(tokens[8]))) {
+                               Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
+                                vehiculos.add(vehiculo);
+
+                            } else if (precio.equals("no")) {
+                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
                             }
-                        } else if (precio.isBlank()) {
-                            Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3],
-                                    Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6],
-                                    tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
-                            vehiculos.add(vehiculo);
                         }
-                    } else if (recorrido.isBlank()) {
-                        if ((Integer.parseInt(anoRango[0]) <= Integer.parseInt(tokens[4]))
-                                || (Integer.parseInt(anoRango[1]) >= Integer.parseInt(tokens[4]))) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6],
-                                        tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
+                    } else if (recorridoRango.equals("no")) {
+                        if ((anoRango1 <= Integer.parseInt(tokens[4]))
+                                || (anoRango2 >= Integer.parseInt(tokens[4]))) {
+                            if ((precioRango1) <= Double.valueOf(tokens[8])
+                                    || (precioRango2 >= Double.valueOf(tokens[8]))) {
+                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
-                            } else if (precio.isBlank()) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6],
-                                        tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
+
+                            } else if (precio.equals("no")) {
+                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
                             }
-                        } else if (ano.isBlank()) {
-                            if ((Integer.parseInt(precioRango[0]) <= Integer.parseInt(tokens[10]))
-                                    || (Integer.parseInt(precioRango[1]) >= Integer.parseInt(tokens[10]))) {
-                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3],
-                                        Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6],
-                                        tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
+
+                        } else if (ano.equals("no")) {
+                            if ((precioRango1) <= Double.valueOf(tokens[8])
+                                    || (precioRango2 >= Double.valueOf(tokens[8]))) {
+                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
+                                vehiculos.add(vehiculo);
+
+                            } else if (precio.equals("no")) {
+                                Vehiculo vehiculo = new Vehiculo(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], Double.parseDouble(tokens[8]));
                                 vehiculos.add(vehiculo);
                             }
-                        } else if (precio.isBlank()) {
-                            Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3],
-                                    Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6],
-                                    tokens[7], tokens[8], tokens[9], tokens[10], Double.parseDouble(tokens[11]));
-                            vehiculos.add(vehiculo);
                         }
+
                     }
+
                 }
+                if ((tipo.equals("camioneta") && (tamano == 11)) || (tipo.equals("nada"))) { //#de atributos que tendran los autos
+                    if ((recorridoRango1 <= Double.valueOf(tokens[5]))
+                            || (recorridoRango2 >= Double.valueOf(tokens[5]))) {
+                        if ((anoRango1 <= Integer.parseInt(tokens[4]))
+                                || (anoRango2 >= Integer.parseInt(tokens[4]))) {
+                            if ((precioRango1) <= Double.valueOf(tokens[11])
+                                    || (precioRango2 >= Double.valueOf(tokens[11]))) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                vehiculos.add(vehiculo);
+
+                            } else if (precio.equals("no")) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                vehiculos.add(vehiculo);
+                            }
+
+                        } else if (ano.equals("no")) {
+                            if ((precioRango1) <= Double.valueOf(tokens[11])
+                                    || (precioRango2 >= Double.valueOf(tokens[11]))) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                vehiculos.add(vehiculo);
+
+                            } else if (precio.equals("no")) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                vehiculos.add(vehiculo);
+                            }
+                        }
+                    } else if (recorridoRango.equals("no")) {
+                        if ((anoRango1 <= Integer.parseInt(tokens[4]))
+                                || (anoRango2 >= Integer.parseInt(tokens[4]))) {
+                            if ((precioRango1) <= Double.valueOf(tokens[11])
+                                    || (precioRango2 >= Double.valueOf(tokens[11]))) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                vehiculos.add(vehiculo);
+
+                            } else if (precio.equals("no")) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                vehiculos.add(vehiculo);
+                            }
+
+                        } else if (ano.equals("no")) {
+                            if ((precioRango1) <= Double.valueOf(tokens[11])
+                                    || (precioRango2 >= Double.valueOf(tokens[11]))) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                vehiculos.add(vehiculo);
+
+                            } else if (precio.equals("no")) {
+                                Camioneta vehiculo = new Camioneta(tokens[0], tokens[1], tokens[2], tokens[3], Integer.parseInt(tokens[4]), Double.parseDouble(tokens[5]), tokens[6], tokens[7], tokens[8], tokens[9], tokens[10] ,Double.parseDouble(tokens[11]));
+                                vehiculos.add(vehiculo);
+                            }
+                        }
+
+                    }
+
+                }
+                
             }
-            return vehiculos;
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        System.out.println(vehiculos.get(0));
+
         return null;
     }
 
@@ -332,7 +326,7 @@ public class Comprador extends Persona {
                 System.out.println(("vidrios" + tipo_auto.getVidrios()));
                 System.out.println(("transmision" + tipo_auto.getTransmision()));
                 System.out.println(("precio" + vehiculo.get(i).getPrecio()));
-                System.out.println("");
+
                 if ((i < (vehiculo.size() - 1)) && (i != 0)) { //limitando la opcion de avanzar solo hasta el penultimo item
 
                     System.out.println("1.Siguiente opcion");

@@ -4,6 +4,7 @@
 
 package ec.edu.espol.proyecto_primer_parcial;
 
+import ec.edu.espol.clases.Comprador;
 import static ec.edu.espol.clases.Comprador.opcionesComprador;
 import static ec.edu.espol.clases.Hash.getSHA;
 import static ec.edu.espol.clases.Hash.toHexString;
@@ -38,5 +39,7 @@ public class Proyecto_Primer_Parcial {
                 System.out.println("Ingrese una opcion valida");
         }
         }while (opcion!=3);
+    
     }
+    
 }
