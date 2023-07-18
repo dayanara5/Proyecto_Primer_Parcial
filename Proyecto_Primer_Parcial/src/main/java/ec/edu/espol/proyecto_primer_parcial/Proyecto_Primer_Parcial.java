@@ -26,11 +26,13 @@ public class Proyecto_Primer_Parcial {
         int opcion;
 
         do {
-
-            System.out.println("Ingrese la opcion");
+            System.out.println("---------------------------------");
+            System.out.println("-Menu de Opciones-");
             System.out.println("1.Vendedor");
             System.out.println("2.Comprador");
             System.out.println("3.Salir");
+            System.out.println("---------------------------------");
+            System.out.println("Ingrese la opcion: ");
             opcion= sc.nextInt();
             switch (opcion) {
                 case 1:
@@ -43,7 +45,8 @@ public class Proyecto_Primer_Parcial {
                     opcion = 3;
                     break;
                 default:
-                    System.out.println("Ingrese una opcion valida");
+                    
+                    System.out.println("Ingrese una opcion valida ");
             }
         } while (opcion != 3);
     
