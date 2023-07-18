@@ -22,8 +22,13 @@ public class Comprador extends Persona {
         this.ofertas = ofertas;
     }
 
-    public Comprador(String correoElectronico, String clave) {
-        super(null, null, null, correoElectronico, clave);
+    public Comprador(String nombre, String apellidos, String org,String correoElectronico, String clave) {
+        super(nombre, apellidos, org, correoElectronico, clave);
+        this.ofertas = new ArrayList<>();
+    }
+    
+    public Comprador(String correo, String contrasena){
+        super(null,null,null,correo,contrasena);
         this.ofertas = new ArrayList<>();
     }
 
@@ -133,16 +138,16 @@ public class Comprador extends Persona {
             while (sc.hasNextLine()) {
                 String linea = sc.nextLine();
                 String[] tokens = linea.split("\\|");
-                
+
                 int tamano = tokens.length;
-     
+
                 while (!((tipo.equals("auto")) || (tipo.equals("moto")) || (tipo.equals("camioneta")) || (tipo.equals("no")))) {
                     System.out.println("Ingrese un tipo valido");
                     tipo = sc.nextLine();
 
                 }
-                
-                if ((tipo.equals("auto") && (tamano == 11)) || ((tipo.equals("no")) && (tamano == 11))) { //#de atributos que tendran los autos
+
+                if ((tipo.equals("auto") && (tamano == 12)) || ((tipo.equals("no")) && (tamano == 12))) { //#de atributos que tendran los autos
                     if ((recorridoRango1 <= Double.valueOf(tokens[5]))
                             || (recorridoRango2 >= Double.valueOf(tokens[5]))) {
                         if ((anoRango1 <= Integer.parseInt(tokens[4]))
@@ -194,9 +199,8 @@ public class Comprador extends Persona {
                         }
 
                     }
-                    
-                }
-                else if ((tipo.equals("moto") && (tamano == 9)) || ((tipo.equals("no"))) && (tamano ==9)) { //#de atributos que tendran los autos
+
+                } else if ((tipo.equals("moto") && (tamano == 10)) || ((tipo.equals("no"))) && (tamano == 10)) { //#de atributos que tendran los autos
                     if ((recorridoRango1 <= Double.valueOf(tokens[5]))
                             || (recorridoRango2 >= Double.valueOf(tokens[5]))) {
                         if ((anoRango1 <= Integer.parseInt(tokens[4]))
@@ -248,9 +252,8 @@ public class Comprador extends Persona {
                         }
 
                     }
-                    
-                }
-                else if ((tipo.equals("camioneta") && ((tamano == 12))) || (tamano ==12  && (tipo.equals("no")))) { //#de atributos que tendran los autos
+
+                } else if ((tipo.equals("camioneta") && ((tamano == 13))) || (tamano == 13 && (tipo.equals("no")))) { //#de atributos que tendran los autos
                     if ((recorridoRango1 <= Double.valueOf(tokens[5]))
                             || (recorridoRango2 >= Double.valueOf(tokens[5]))) {
                         if ((anoRango1 <= Integer.parseInt(tokens[4]))
@@ -303,9 +306,9 @@ public class Comprador extends Persona {
                         }
 
                     }
-                    
+
                 }
-                
+
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -314,7 +317,7 @@ public class Comprador extends Persona {
         return vehiculos;
     }
 
-    public static ArrayList<Oferta> hacerOferta() {
+    public static void hacerOferta() {
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Ingrese correo");
@@ -324,8 +327,27 @@ public class Comprador extends Persona {
         ArrayList<Oferta> ofertasVehiculo = new ArrayList<>();
 
         inicioSesion(correo, contrasena, "compradores"); //Siempre retornara true por las condiciones del metodo
-
-        Comprador comprador = new Comprador(correo, contrasena);
+        
+        String correoIgual = null;
+        String nombre= null;
+        String apellidos = null;
+        String org = null;
+        
+        try (Scanner read = new Scanner((new File("compradores.txt")))) {
+            while (read.hasNextLine()) {
+                String linea = read.nextLine();
+                String[] tokens = linea.split("\\|");
+                if (correo.equals(tokens[3])){
+                    correoIgual= tokens[3];
+                    nombre= tokens[0];
+                    apellidos = tokens[1];
+                    org = tokens[2];
+                }
+            }
+            }catch (Exception e) {
+                                    System.out.println(e.getMessage());
+                                }
+            Comprador comprador = new Comprador(nombre,apellidos,org,correoIgual,contrasena);
 
         System.out.println("Ingrese tipo de vehiculo");
         String tipo = sc.nextLine();
@@ -335,9 +357,11 @@ public class Comprador extends Persona {
         String ano = sc.nextLine();
         System.out.println("Ingrese rango de precio");
         String precio = sc.nextLine();
+        
         ArrayList<Vehiculo> vehiculo = buscarVehiculo(tipo, recorrido, ano, precio);
         int opcion;
         int i = 0;
+        
         while (i < vehiculo.size()) {
             if (vehiculo.get(i) instanceof Auto) { //mostrar toda la informacion del vehiculo si es un auto
                 Auto tipo_auto = (Auto) vehiculo.get(i);
@@ -386,7 +410,7 @@ public class Comprador extends Persona {
                                 opcion = 15; //#para cerrar el while
                                 i = vehiculo.size();
                                 break;
-                                
+
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
@@ -546,11 +570,11 @@ public class Comprador extends Persona {
                                 opcion = 15;
                                 i = vehiculo.size();
                                 break;
-                                
+
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
-                                
+
                                 break;
                         }
                     } while (opcion == 10);
@@ -581,7 +605,7 @@ public class Comprador extends Persona {
                                 }
                                 opcion = 15;
                                 i = vehiculo.size();
-                                break; 
+                                break;
                             default:
                                 System.out.println("Ingresa una opcion valida");
                                 opcion = 10;
@@ -713,7 +737,7 @@ public class Comprador extends Persona {
                 }
             }
         }
-        return ofertasVehiculo;
+
     }
 
     public static void opcionesComprador() {

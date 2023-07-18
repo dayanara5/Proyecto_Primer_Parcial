@@ -111,8 +111,9 @@ public class Utilitaria {
                 vendedor.setClave(contrasena);
             }
 
-            return ((validarCorreo(vendedor, filenom) == true) && (validarContrasena(vendedor, filenom) == true));
-        } else if (filenom.equals("compradores")) {
+            return ((validarCorreo(vendedor, filenom) == true) && (validarContrasena(vendedor, filenom) == true));        
+        } 
+        else if (filenom.equals("compradores")) {
             Comprador comprador = new Comprador(correo, contrasena);
             while (validarCorreo(comprador, filenom) == false) {
                 System.out.println("Correo invalido, ingrese uno existente");
@@ -124,6 +125,7 @@ public class Utilitaria {
                 System.out.println("Contrasena invalida, intentelo de nuevo");
                 contrasena = sc.nextLine();
                 comprador.setClave(contrasena);
+                System.out.println(validarContrasena(comprador,filenom));
             }
 
             return ((validarCorreo(comprador, filenom) == true) && (validarContrasena(comprador, filenom) == true));
