@@ -67,12 +67,13 @@ public class Vendedor extends Persona {
         int opcion;
 
         do {
+            System.out.println("---------------------------------");
             System.out.println("1.Registrar un nuevo vendedor");
             System.out.println("2.Registrar un nuevo vehiculo");
             System.out.println("3.Revisar oferta");
             System.out.println("4.Salir");
-
-            System.out.println("Eliga que desea hacer");
+            System.out.println("---------------------------------");
+            System.out.println("Eliga que desea hacer: ");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
@@ -161,7 +162,7 @@ public class Vendedor extends Persona {
                 if (tokens[0].equals(vehi.getPlaca())) {
                     lineToRemove = linea;
                 }
-
+            
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

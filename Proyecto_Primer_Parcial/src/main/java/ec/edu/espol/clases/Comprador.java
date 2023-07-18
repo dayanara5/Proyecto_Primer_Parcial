@@ -320,9 +320,9 @@ public class Comprador extends Persona {
     public static void hacerOferta() {
 
         Scanner sc = new Scanner(System.in);
-        System.out.println("Ingrese correo");
+        System.out.println("Ingrese correo: ");
         String correo = sc.nextLine();
-        System.out.println("Ingrese contraseña");
+        System.out.println("Ingrese contraseña: ");
         String contrasena = sc.nextLine();
         ArrayList<Oferta> ofertasVehiculo = new ArrayList<>();
 
@@ -349,13 +349,13 @@ public class Comprador extends Persona {
                                 }
             Comprador comprador = new Comprador(nombre,apellidos,org,correoIgual,contrasena);
 
-        System.out.println("Ingrese tipo de vehiculo");
+        System.out.println("Ingrese tipo de vehiculo: (auto, camioneta, moto)");
         String tipo = sc.nextLine();
         System.out.println("Ingrese rango de recorrido, ejem.: 5000-10000");
         String recorrido = sc.nextLine();
         System.out.println("Ingrese rango de año, ejem.: 1970-2000");
         String ano = sc.nextLine();
-        System.out.println("Ingrese rango de precio");
+        System.out.println("Ingrese rango de precio: ");
         String precio = sc.nextLine();
         
         ArrayList<Vehiculo> vehiculo = buscarVehiculo(tipo, recorrido, ano, precio);
@@ -365,6 +365,7 @@ public class Comprador extends Persona {
         while (i < vehiculo.size()) {
             if (vehiculo.get(i) instanceof Auto) { //mostrar toda la informacion del vehiculo si es un auto
                 Auto tipo_auto = (Auto) vehiculo.get(i);
+                System.out.println("---------------------------------");
                 System.out.println(("placa: " + vehiculo.get(i).getPlaca()));
                 System.out.println(("marca: " + vehiculo.get(i).getMarca()));
                 System.out.println(("modelo: " + vehiculo.get(i).getModelo()));
@@ -376,7 +377,7 @@ public class Comprador extends Persona {
                 System.out.println(("vidrios: " + tipo_auto.getVidrios()));
                 System.out.println(("transmision: " + tipo_auto.getTransmision()));
                 System.out.println(("precio: " + vehiculo.get(i).getPrecio()));
-
+                System.out.println("---------------------------------");
                 if ((i < (vehiculo.size() - 1)) && (i != 0)) { //limitando la opcion de avanzar solo hasta el penultimo item
 
                     System.out.println("1.Siguiente opcion");
@@ -403,6 +404,7 @@ public class Comprador extends Persona {
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
                                             + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
+                                    
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
@@ -431,15 +433,17 @@ public class Comprador extends Persona {
                                 i += 1;
                                 break;
                             case 2:
-                                System.out.println("Ingrese su oferta");
+                                System.out.println("Ingrese su oferta:");
                                 double oferton = sc.nextDouble();
                                 Oferta oferta = new Oferta(comprador, vehiculo.get(i), oferton);
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
                                 vehiculo.get(i).getOfertas().add(oferta);
+                                
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
                                             + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
+                                   
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
@@ -474,6 +478,8 @@ public class Comprador extends Persona {
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
                                             + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
+                                    
+                                    
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
@@ -528,6 +534,8 @@ public class Comprador extends Persona {
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
                                             + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
+                                    
+                                    
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
@@ -561,12 +569,17 @@ public class Comprador extends Persona {
                                 ofertasVehiculo.add(oferta);
                                 comprador.setOfertas(ofertasVehiculo);
                                 vehiculo.get(i).getOfertas().add(oferta);
+                                
+                                
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
+                                    
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
                                             + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
+                                    
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
+                                
                                 opcion = 15;
                                 i = vehiculo.size();
                                 break;
@@ -600,6 +613,7 @@ public class Comprador extends Persona {
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
                                             + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
+                                    
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
@@ -651,6 +665,7 @@ public class Comprador extends Persona {
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
                                             + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
+
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
@@ -686,6 +701,7 @@ public class Comprador extends Persona {
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
                                             + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
+                                    
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
@@ -720,6 +736,7 @@ public class Comprador extends Persona {
                                 try (PrintWriter pw = new PrintWriter(new FileOutputStream(new File("ofertas.txt"), true))) {
                                     pw.println(comprador.getNombre() + "|" + comprador.getApellidos() + "|"
                                             + comprador.getCorreoElectronico() + "|" + (oferta.getVehiculo()).getPlaca() + "|" + oferta.getPrecio());
+                                    
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
                                 }
@@ -746,11 +763,12 @@ public class Comprador extends Persona {
         int opcion;
 
         do {
+            System.out.println("---------------------------------");
             System.out.println("1.Registrar un nuevo comprador");
             System.out.println("2.Ofertar por un vehiculo");
             System.out.println("3.Salir");
-
-            System.out.println("Eliga que desea hacer");
+            System.out.println("---------------------------------");
+            System.out.println("Eliga que desea hacer: ");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
@@ -762,7 +780,7 @@ public class Comprador extends Persona {
                 case 3:
                     break;
                 default:
-                    System.out.println("Eliga una opcion valida");
+                    System.out.println("Eliga una opcion valida: ");
 
             }
         } while (opcion != 3);
